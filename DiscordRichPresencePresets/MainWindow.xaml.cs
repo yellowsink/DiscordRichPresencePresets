@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static DiscordRichPresencePresets.PresetDataManager;
 
 namespace DiscordRichPresencePresets
 {
@@ -10,27 +12,25 @@ namespace DiscordRichPresencePresets
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public readonly List<Presence> Presences = new List<Presence>
-		{
-			new Presence
-			{
-				Title = "Test presence",
-				Data1 = "Test Data 1",
-				Data2 = "Test Data 2"
-			},
-			new Presence
-			{
-				Title = "Here's another",
-				Data1 = "Data 1 again",
-				Data2 = "Data 2 again"
-			}
-		};
+		public List<Presence> Presences;
 
-		public int Active = 0;
+		public int Active;
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			var loadedPresetCollection = LoadPresetCollection("default");
+			Presences = loadedPresetCollection.Any()
+				            ? loadedPresetCollection
+				            : new()
+				            {
+					            new Presence
+					            {
+						            Title = "Hello, World!",
+						            Data1 = "Welcome to Discord RP Presets",
+						            Data2 = "To get started add a preset!"
+					            }
+				            };
 			UpdatePresenceDisplay();
 		}
 
@@ -45,6 +45,14 @@ namespace DiscordRichPresencePresets
 				Data1 = dialog.TextBoxData1.Text,
 				Data2 = dialog.TextBoxData2.Text
 			});
+			UpdatePresenceDisplay();
+		}
+
+		private void SavePresences(object sender, RoutedEventArgs e) => Presences.SavePresetCollection("default");
+
+		private void LoadPresences(object sender, RoutedEventArgs e)
+		{
+			Presences = LoadPresetCollection("default");
 			UpdatePresenceDisplay();
 		}
 
@@ -172,12 +180,5 @@ namespace DiscordRichPresencePresets
 				PanelPresenceList.Children.Add(uiElement);
 			}
 		}
-	}
-
-	public class Presence
-	{
-		public string Title;
-		public string Data1;
-		public string Data2;
 	}
 }

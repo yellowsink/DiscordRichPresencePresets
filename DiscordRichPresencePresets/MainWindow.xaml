@@ -24,8 +24,8 @@
 
 		<!-- Action buttons -->
 		<Button Content="Add" Margin="5" Grid.Row="1" Grid.Column="0" Click="AddPresence" />
-		<Button Content="Load" Margin="5" Grid.Row="1" Grid.Column="1" />
-		<Button Content="Save" Margin="5" Grid.Row="1" Grid.Column="2" />
+		<Button Content="Load" Margin="5" Grid.Row="1" Grid.Column="1" Click="LoadPresences" />
+		<Button Content="Save" Margin="5" Grid.Row="1" Grid.Column="2" Click="SavePresences" />
 
 		<!-- List of presences -->
 		<ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Top">
