@@ -34,6 +34,20 @@ namespace DiscordRichPresencePresets
 			UpdatePresenceDisplay();
 		}
 
+		private void AddPresence(object sender, RoutedEventArgs e)
+		{
+			var dialog = new AddDialog();
+			var result = dialog.ShowDialog();
+			if (!result.HasValue || !result.Value) return;
+			Presences.Add(new Presence
+			{
+				Title = dialog.TextBoxTitle.Text,
+				Data1 = dialog.TextBoxData1.Text,
+				Data2 = dialog.TextBoxData2.Text
+			});
+			UpdatePresenceDisplay();
+		}
+
 		private void RemovePresence(int i)
 		{
 			Presences.RemoveAt(i);
