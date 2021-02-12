@@ -1,0 +1,57 @@
+﻿<Window x:Class="DiscordRichPresencePresets.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiscordRichPresencePresets"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="450">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<!-- Title -->
+		<TextBlock Text="Discord Rich Presence Presets" FontSize="25" Margin="5" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" />
+
+		<!-- Action buttons -->
+		<Button Content="Add" Margin="5" Grid.Row="1" Grid.Column="0" />
+		<Button Content="Load" Margin="5" Grid.Row="1" Grid.Column="1" />
+		<Button Content="Save" Margin="5" Grid.Row="1" Grid.Column="2" />
+
+		<!-- List of presences -->
+		<ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Top">
+			<StackPanel Name="PanelPresenceList">
+				<!-- The following code has been re-written as C# objects and will be dynamically added -->
+
+				<!--<Border BorderBrush="Lightgray" BorderThickness="2" Margin="5" Height="100" Width="400">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<TextBlock Text="Title" FontSize="18" Margin="5,0" VerticalAlignment="Center" />
+					<TextBlock Text="Data1" FontSize="18" Grid.Row="1" Margin="5,0" VerticalAlignment="Center" />
+					<TextBlock Text="Data2" FontSize="18" Grid.Row="2" Margin="5,0" VerticalAlignment="Center" />
+
+					<Button Content="Make Active" Grid.Column="1" Margin="5" />
+					<Button Content="Edit" Grid.Column="1" Margin="5" Grid.Row="1" />
+					<Button Content="Delete" Grid.Column="1" Margin="5" Grid.Row="2" />
+				</Grid>
+			</Border>-->
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</Window>
