@@ -32,10 +32,18 @@ namespace DiscordRichPresencePresets
 			UpdatePresenceDisplay();
 		}
 
+		private void RemovePresence(int i)
+		{
+			_presences.RemoveAt(i);
+			UpdatePresenceDisplay();
+		}
+
 		private void UpdatePresenceDisplay()
 		{
-			foreach (var presence in _presences)
+			PanelPresenceList.Children.Clear();
+			for (var i = 0; i < _presences.Count; i++)
 			{
+				var presence = _presences[i];
 				var titleText = new TextBlock
 				{
 					Text              = presence.Title,
@@ -76,6 +84,9 @@ namespace DiscordRichPresencePresets
 					Content = "Delete",
 					Margin  = new Thickness(5)
 				};
+
+				var i1 = i;
+				deleteButton.Click += (sender, args) => RemovePresence(i1);
 
 				Grid.SetColumn(activeButton, 1);
 				Grid.SetColumn(editButton,   1);
