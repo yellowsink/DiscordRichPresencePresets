@@ -52,6 +52,7 @@ namespace DiscordRichPresencePresets
 		{
 			var dialog = new AddDialog();
 			dialog.TextBlockTitle.Text = "Edit Presence"; // Wow this is hacky
+			dialog.Root.Title          = "Edit Presence";
 			dialog.TextBoxTitle.Text   = Presences[i].Title;
 			dialog.TextBoxData1.Text   = Presences[i].Data1;
 			dialog.TextBoxData2.Text   = Presences[i].Data2;
