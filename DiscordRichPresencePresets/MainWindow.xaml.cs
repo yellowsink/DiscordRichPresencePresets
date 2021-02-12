@@ -48,6 +48,24 @@ namespace DiscordRichPresencePresets
 			UpdatePresenceDisplay();
 		}
 
+		private void EditPresence(int i)
+		{
+			var dialog = new AddDialog();
+			dialog.TextBlockTitle.Text = "Edit Presence"; // Wow this is hacky
+			dialog.TextBoxTitle.Text   = Presences[i].Title;
+			dialog.TextBoxData1.Text   = Presences[i].Data1;
+			dialog.TextBoxData2.Text   = Presences[i].Data2;
+			var result = dialog.ShowDialog();
+			if (!result.HasValue || !result.Value) return;
+			Presences[i] = new Presence
+			{
+				Title = dialog.TextBoxTitle.Text,
+				Data1 = dialog.TextBoxData1.Text,
+				Data2 = dialog.TextBoxData2.Text
+			};
+			UpdatePresenceDisplay();
+		}
+
 		private void RemovePresence(int i)
 		{
 			Presences.RemoveAt(i);
@@ -111,6 +129,7 @@ namespace DiscordRichPresencePresets
 				var i1 = i;
 				deleteButton.Click += (sender, args) => RemovePresence(i1);
 				activeButton.Click += (sender, args) => MakeActive(i1);
+				editButton.Click   += (sender, args) => EditPresence(i1);
 
 				Grid.SetColumn(activeButton, 1);
 				Grid.SetColumn(editButton,   1);
