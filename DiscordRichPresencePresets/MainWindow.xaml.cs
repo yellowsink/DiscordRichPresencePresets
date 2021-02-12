@@ -10,7 +10,7 @@ namespace DiscordRichPresencePresets
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private readonly List<Presence> _presences = new List<Presence>
+		public readonly List<Presence> Presences = new List<Presence>
 		{
 			new Presence
 			{
@@ -26,6 +26,8 @@ namespace DiscordRichPresencePresets
 			}
 		};
 
+		public int Active = 0;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -34,16 +36,23 @@ namespace DiscordRichPresencePresets
 
 		private void RemovePresence(int i)
 		{
-			_presences.RemoveAt(i);
+			Presences.RemoveAt(i);
+			if (Active >= Presences.Count) Active = Presences.Count - 1;
+			UpdatePresenceDisplay();
+		}
+
+		private void MakeActive(int i)
+		{
+			Active = i;
 			UpdatePresenceDisplay();
 		}
 
 		private void UpdatePresenceDisplay()
 		{
 			PanelPresenceList.Children.Clear();
-			for (var i = 0; i < _presences.Count; i++)
+			for (var i = 0; i < Presences.Count; i++)
 			{
-				var presence = _presences[i];
+				var presence = Presences[i];
 				var titleText = new TextBlock
 				{
 					Text              = presence.Title,
@@ -87,6 +96,7 @@ namespace DiscordRichPresencePresets
 
 				var i1 = i;
 				deleteButton.Click += (sender, args) => RemovePresence(i1);
+				activeButton.Click += (sender, args) => MakeActive(i1);
 
 				Grid.SetColumn(activeButton, 1);
 				Grid.SetColumn(editButton,   1);
@@ -96,7 +106,7 @@ namespace DiscordRichPresencePresets
 
 				var uiElement = new Border
 				{
-					BorderBrush     = Brushes.LightGray,
+					BorderBrush     = Active == i ? Brushes.ForestGreen : Brushes.LightGray,
 					BorderThickness = new Thickness(2),
 					Margin          = new Thickness(5),
 					Height          = 100,
