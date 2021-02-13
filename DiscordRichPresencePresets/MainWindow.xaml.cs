@@ -110,6 +110,7 @@ namespace DiscordRichPresencePresets
 			else
 			{
 				Presences = LoadPresetCollection(dialog.ComboBoxSlots.Text, out Active);
+				MakeActive(Active);
 				UpdatePresenceDisplay();
 			}
 		}
