@@ -23,8 +23,8 @@ Assuming you are in the repo root, run the following:
 cd DiscordRichPresencePresets
 dotnet run
 ```
-### Publish a standalone release
+### Publish a release
 Assuming you are in the repo root, run the following:
 ```
-dotnet publish --self-contained true -p:PublishTrimmed=true -r win-x64
+dotnet publish --self-contained false -r win-x86
 ```
