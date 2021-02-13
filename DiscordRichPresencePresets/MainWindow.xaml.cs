@@ -16,6 +16,8 @@ namespace DiscordRichPresencePresets
 
 		public int Active;
 
+		public PresenceApiWorker ApiWorker = new("810097912901402654");
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -31,6 +33,9 @@ namespace DiscordRichPresencePresets
 						            Data2 = "To get started add a preset!"
 					            }
 				            };
+
+			ApiWorker.SetRichPresence(Presences[Active]);
+
 			UpdatePresenceDisplay();
 		}
 
@@ -85,6 +90,9 @@ namespace DiscordRichPresencePresets
 		private void MakeActive(int i)
 		{
 			Active = i;
+
+			ApiWorker.SetRichPresence(Presences[i]);
+
 			UpdatePresenceDisplay();
 		}
 
