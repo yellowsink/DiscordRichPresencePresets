@@ -10,12 +10,18 @@
     <Compile Update="AddDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="SaveDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="AddDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SaveDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

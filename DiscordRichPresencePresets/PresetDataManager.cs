@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace DiscordRichPresencePresets
@@ -39,6 +40,15 @@ namespace DiscordRichPresencePresets
 			{
 				return new List<Presence>();
 			}
+		}
+
+		public static string[] GetPresetCollections()
+		{
+			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
+			var saveFolder  = Path.Combine(appDataRoot, "Saved Preset Collections");
+
+			return new DirectoryInfo(saveFolder).EnumerateFiles().Select(f => f.Name.Split('.')[0]).ToArray();
 		}
 	}
 }

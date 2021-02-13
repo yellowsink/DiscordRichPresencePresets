@@ -51,7 +51,18 @@ namespace DiscordRichPresencePresets
 			UpdatePresenceDisplay();
 		}
 
-		private void SavePresences(object sender, RoutedEventArgs e) => Presences.SavePresetCollection("default");
+		private void SavePresences(object sender, RoutedEventArgs e)
+		{
+			var presenceSlots = GetPresetCollections();
+
+			var dialog = new SaveDialog();
+			foreach (var slot in presenceSlots) dialog.ComboBoxSlots.Items.Add(slot);
+
+			var result = dialog.ShowDialog();
+			if (!result.HasValue || !result.Value) return;
+
+			Presences.SavePresetCollection(dialog.ComboBoxSlots.Text);
+		}
 
 		private void LoadPresences(object sender, RoutedEventArgs e)
 		{
@@ -61,11 +72,13 @@ namespace DiscordRichPresencePresets
 
 		private void EditPresence(int i)
 		{
-			var dialog = new AddDialog();
-			dialog.TextBlockTitle.Text = "Edit Presence"; // Wow this is hacky
-			dialog.Root.Title          = "Edit Presence";
-			dialog.TextBoxData1.Text   = Presences[i].Data1;
-			dialog.TextBoxData2.Text   = Presences[i].Data2;
+			var dialog = new AddDialog
+			{
+				TextBlockTitle = {Text  = "Edit Presence"},
+				Root           = {Title = "Edit Presence"},
+				TextBoxData1   = {Text  = Presences[i].Data1},
+				TextBoxData2   = {Text  = Presences[i].Data2}
+			};
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
 			Presences[i] = new Presence
