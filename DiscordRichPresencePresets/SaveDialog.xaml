@@ -24,7 +24,7 @@
 		<Label Grid.Row="1" Content="Preset Collection" />
         <ComboBox Name="ComboBoxSlots" IsEditable="True" Grid.Column="1" Grid.Row="1" />
 		
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="4">
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="4" Grid.ColumnSpan="2">
 			<Button Content="Cancel" Margin="5" Width="100" Click="ButtonCancel_OnClick" />
 			<Button Content="OK" Margin="5" Width="100" Click="ButtonOk_OnClick" />
 		</StackPanel>
