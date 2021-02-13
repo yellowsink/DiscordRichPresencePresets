@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiscordRichPresencePresets"
         mc:Ignorable="d"
-        Title="Discord RP Presets" Height="500" Width="450">
+        Title="Discord RP Presets" Height="500" Width="650">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />

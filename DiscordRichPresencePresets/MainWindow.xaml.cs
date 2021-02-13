@@ -157,8 +157,35 @@ namespace DiscordRichPresencePresets
 					Margin            = new Thickness(5, 0, 0, 0),
 					VerticalAlignment = VerticalAlignment.Center
 				};
+				var imagesText = new TextBlock
+				{
+					Text              = (presence.BigImage ?? "none") + ", " + (presence.SmallImage ?? "none"),
+					FontSize          = 18,
+					Margin            = new Thickness(5, 0, 0, 0),
+					VerticalAlignment = VerticalAlignment.Center
+				};
 
-				Grid.SetRow(data2Text, 1);
+				Grid.SetRow(data2Text,  1);
+				Grid.SetRow(imagesText, 2);
+
+				var bigImgText = new TextBlock
+				{
+					Text              = presence.BigImageText,
+					FontSize          = 18,
+					Margin            = new Thickness(5, 0, 0, 0),
+					VerticalAlignment = VerticalAlignment.Center
+				};
+				var smallImgText = new TextBlock
+				{
+					Text              = presence.SmallImageText,
+					FontSize          = 18,
+					Margin            = new Thickness(5, 0, 0, 0),
+					VerticalAlignment = VerticalAlignment.Center
+				};
+
+				Grid.SetRow(smallImgText, 1);
+				Grid.SetColumn(bigImgText,   1);
+				Grid.SetColumn(smallImgText, 1);
 
 				var activeButton = new Button
 				{
@@ -181,9 +208,9 @@ namespace DiscordRichPresencePresets
 				activeButton.Click += (_, _) => MakeActive(i1);
 				editButton.Click   += (_, _) => EditPresence(i1);
 
-				Grid.SetColumn(activeButton, 1);
-				Grid.SetColumn(editButton,   1);
-				Grid.SetColumn(deleteButton, 1);
+				Grid.SetColumn(activeButton, 2);
+				Grid.SetColumn(editButton,   2);
+				Grid.SetColumn(deleteButton, 2);
 				Grid.SetRow(editButton,   1);
 				Grid.SetRow(deleteButton, 2);
 
@@ -193,12 +220,12 @@ namespace DiscordRichPresencePresets
 					BorderThickness = new Thickness(2),
 					Margin          = new Thickness(5),
 					Height          = 100,
-					Width           = 400,
 					Child = new Grid
 					{
 						ColumnDefinitions =
 						{
-							new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+							new ColumnDefinition {Width = new GridLength(4, GridUnitType.Star)},
+							new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
 							new ColumnDefinition {Width = GridLength.Auto}
 						},
 						RowDefinitions =
@@ -211,6 +238,11 @@ namespace DiscordRichPresencePresets
 						{
 							data1Text,
 							data2Text,
+							imagesText,
+
+							bigImgText,
+							smallImgText,
+
 							activeButton,
 							editButton,
 							deleteButton
