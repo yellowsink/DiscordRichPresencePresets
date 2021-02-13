@@ -2,7 +2,7 @@
 Discord Rich Presence Presets, is a program written in .NET that adds a custom presence on Discord, with the ability to change presets.
 For Example you can set a preset for sleeping, e p i c l y  gaming, doing homework etc.
 # Installation
-Grab a release from the [releases](https://github.com/cainy-a/DiscordRichPresencePresets/releases), go just get the [latest one](https://github.com/cainy-a/DiscordRichPresencePresets/releases/latest).
+Grab a release from the [releases](https://github.com/cainy-a/DiscordRichPresencePresets/releases), or just get the [latest one](https://github.com/cainy-a/DiscordRichPresencePresets/releases/latest).
 Extract the zip, then run the `.exe`.
 # Preview
 This is a (very slightly less than last time) BETA™ preview.  
