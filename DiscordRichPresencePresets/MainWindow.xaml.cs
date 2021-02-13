@@ -61,7 +61,15 @@ namespace DiscordRichPresencePresets
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
 
-			Presences.SavePresetCollection(dialog.ComboBoxSlots.Text);
+			if (string.IsNullOrWhiteSpace(dialog.ComboBoxSlots.Text))
+			{
+				MessageBox.Show("Please name the collection");
+				SavePresences(sender, e); // ooh recursion
+			}
+			else
+			{
+				Presences.SavePresetCollection(dialog.ComboBoxSlots.Text);
+			}
 		}
 
 		private void LoadPresences(object sender, RoutedEventArgs e)
