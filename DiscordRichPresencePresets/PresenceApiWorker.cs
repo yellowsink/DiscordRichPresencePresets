@@ -18,7 +18,13 @@ namespace DiscordRichPresencePresets
 		{
 			RpcClient.SetPresence(new RichPresence
 			{
-				Assets     = null,
+				Assets = new Assets
+				{
+					LargeImageKey  = presence.BigImage,
+					LargeImageText = presence.BigImageText,
+					SmallImageKey  = presence.SmallImage,
+					SmallImageText = presence.SmallImageText
+				},
 				Details    = presence.Data1,
 				Party      = null,
 				Secrets    = null,
