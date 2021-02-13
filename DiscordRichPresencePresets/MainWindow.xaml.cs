@@ -12,6 +12,11 @@ namespace DiscordRichPresencePresets
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private readonly string[] _images =
+		{
+			"among_drip", "donk", "gura", "nagisa", "thomas_bullshit", "yeetus", "yellowsink_avatar"
+		};
+
 		public List<Presence> Presences;
 
 		public int Active;
@@ -41,12 +46,22 @@ namespace DiscordRichPresencePresets
 		private void AddPresence(object sender, RoutedEventArgs e)
 		{
 			var dialog = new AddDialog();
+			foreach (var image in _images)
+			{
+				dialog.ComboBoxBigImg.Items.Add(image);
+				dialog.ComboBoxSmallImg.Items.Add(image);
+			}
+
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
 			Presences.Add(new Presence
 			{
-				Data1 = dialog.TextBoxData1.Text,
-				Data2 = dialog.TextBoxData2.Text
+				Data1          = dialog.TextBoxData1.Text,
+				Data2          = dialog.TextBoxData2.Text,
+				BigImage       = dialog.ComboBoxBigImg.Text,
+				SmallImage     = dialog.ComboBoxSmallImg.Text,
+				BigImageText   = dialog.TextBoxBigImg.Text,
+				SmallImageText = dialog.TextBoxSmallImg.Text
 			});
 			UpdatePresenceDisplay();
 		}
@@ -78,7 +93,7 @@ namespace DiscordRichPresencePresets
 
 			var dialog = new SaveDialog
 			{
-				ComboBoxSlots  = {IsEditable = false},
+				ComboBoxSlots  = {IsEditable = false, SelectedIndex = 0},
 				Title          = "Load Presences",
 				TextBlockTitle = {Text = "Load Presences"}
 			};
@@ -103,17 +118,29 @@ namespace DiscordRichPresencePresets
 		{
 			var dialog = new AddDialog
 			{
-				TextBlockTitle = {Text  = "Edit Presence"},
-				Root           = {Title = "Edit Presence"},
-				TextBoxData1   = {Text  = Presences[i].Data1},
-				TextBoxData2   = {Text  = Presences[i].Data2}
+				TextBlockTitle  = {Text  = "Edit Presence"},
+				Root            = {Title = "Edit Presence"},
+				TextBoxData1    = {Text  = Presences[i].Data1},
+				TextBoxData2    = {Text  = Presences[i].Data2},
+				TextBoxBigImg   = {Text  = Presences[i].BigImageText},
+				TextBoxSmallImg = {Text  = Presences[i].SmallImageText}
 			};
+			foreach (var image in _images)
+			{
+				dialog.ComboBoxBigImg.Items.Add(image);
+				dialog.ComboBoxSmallImg.Items.Add(image);
+			}
+
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
 			Presences[i] = new Presence
 			{
-				Data1 = dialog.TextBoxData1.Text,
-				Data2 = dialog.TextBoxData2.Text
+				Data1          = dialog.TextBoxData1.Text,
+				Data2          = dialog.TextBoxData2.Text,
+				BigImage       = dialog.ComboBoxBigImg.Text,
+				SmallImage     = dialog.ComboBoxSmallImg.Text,
+				BigImageText   = dialog.TextBoxBigImg.Text,
+				SmallImageText = dialog.TextBoxSmallImg.Text
 			};
 
 			if (Active == i) MakeActive(i);

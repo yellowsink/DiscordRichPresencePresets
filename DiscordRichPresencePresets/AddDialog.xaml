@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiscordRichPresencePresets"
         mc:Ignorable="d"
-        Title="Add Presence" Height="200" Width="500">
+        Title="Add Presence" Height="300" Width="500">
 	<Grid>
 		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
@@ -15,20 +17,35 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			
+			<RowDefinition Height="Auto" />
 			<!-- Spacer Row because I can't be bothered with layout best practices -->
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<TextBlock Name="TextBlockTitle" Text="Add Presence" Margin="5" Grid.ColumnSpan="2" FontSize="25" />
+		<TextBlock Name="TextBlockTitle" Text="Add Presence" Margin="5" Grid.ColumnSpan="4" FontSize="25" />
 
 		<Label Content="First Row" Margin="5" Grid.Row="1" />
-		<TextBox Name="TextBoxData1" Margin="5" Grid.Row="1" Grid.Column="1" />
+		<TextBox Name="TextBoxData1" Margin="5" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" />
 
 		<Label Content="Second Row" Margin="5" Grid.Row="2" />
-		<TextBox Name="TextBoxData2" Margin="5" Grid.Row="2" Grid.Column="1" />
+		<TextBox Name="TextBoxData2" Margin="5" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" />
+		
+		<Label Content="Big Image" Margin="5" Grid.Row="3" />
+		<ComboBox Name="ComboBoxBigImg" IsEditable="True" Margin="5" Grid.Row="3" Grid.Column="1" />
+		
+		<Label Content="Small Image" Margin="5" Grid.Row="3" Grid.Column="2" />
+		<ComboBox Name="ComboBoxSmallImg" IsEditable="True" Margin="5" Grid.Row="3" Grid.Column="3" />
+		
+		<Label Content="Big Image Text" Margin="5" Grid.Row="4" />
+		<TextBox Name="TextBoxBigImg" Margin="5" Grid.Row="4" Grid.Column="1" />
+		
+		<Label Content="Small Image Text" Margin="5" Grid.Row="4" Grid.Column="2" />
+		<TextBox Name="TextBoxSmallImg" Margin="5" Grid.Row="4" Grid.Column="3" />
 
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="4" Grid.ColumnSpan="2">
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="4">
 			<Button Content="Cancel" Margin="5" Width="100" Click="ButtonCancel_OnClick" />
 			<Button Content="OK" Margin="5" Width="100" Click="ButtonOk_OnClick" />
 		</StackPanel>
