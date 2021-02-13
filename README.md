@@ -27,5 +27,5 @@ dotnet run
 ### Publish a release
 Assuming you are in the repo root, run the following:
 ```
-dotnet publish --self-contained false -r win-x86
+dotnet publish --self-contained false -r win-x64
 ```
