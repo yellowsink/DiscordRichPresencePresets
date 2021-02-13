@@ -26,5 +26,5 @@ dotnet run
 ### Publish a standalone release
 Assuming you are in the repo root, run the following:
 ```
-dotnet publish
+dotnet publish --self-contained true -p:PublishTrimmed=true -r win-x64
 ```
