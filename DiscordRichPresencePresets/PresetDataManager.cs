@@ -44,9 +44,8 @@ namespace DiscordRichPresencePresets
 				active = presetCollection.Active;
 				return presetCollection.Presences.ToList();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				throw ex;
 				active = 0;
 				return new List<Presence>();
 			}
