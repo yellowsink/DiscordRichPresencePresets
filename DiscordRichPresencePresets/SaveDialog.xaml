@@ -19,7 +19,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		
-		<TextBlock FontSize="25" Text="Save Presences" Grid.ColumnSpan="2" />
+		<TextBlock Name="TextBlockTitle" FontSize="25" Text="Save Presences" Grid.ColumnSpan="2" />
 		
 		<Label Grid.Row="1" Content="Preset Collection" />
         <ComboBox Name="ComboBoxSlots" IsEditable="True" Grid.Column="1" Grid.Row="1" />

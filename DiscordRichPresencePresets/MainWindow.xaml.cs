@@ -66,8 +66,29 @@ namespace DiscordRichPresencePresets
 
 		private void LoadPresences(object sender, RoutedEventArgs e)
 		{
-			Presences = LoadPresetCollection("default");
-			UpdatePresenceDisplay();
+			var presenceSlots = GetPresetCollections();
+
+			var dialog = new SaveDialog
+			{
+				ComboBoxSlots  = {IsEditable = false},
+				Title          = "Load Presences",
+				TextBlockTitle = {Text = "Load Presences"}
+			};
+			foreach (var slot in presenceSlots) dialog.ComboBoxSlots.Items.Add(slot);
+
+			var result = dialog.ShowDialog();
+			if (!result.HasValue || !result.Value) return;
+
+			if (string.IsNullOrWhiteSpace(dialog.ComboBoxSlots.Text))
+			{
+				MessageBox.Show("Please choose a collection");
+				LoadPresences(sender, e); // ooh recursion
+			}
+			else
+			{
+				Presences = LoadPresetCollection(dialog.ComboBoxSlots.Text);
+				UpdatePresenceDisplay();
+			}
 		}
 
 		private void EditPresence(int i)
