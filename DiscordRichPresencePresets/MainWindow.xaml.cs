@@ -21,7 +21,7 @@ namespace DiscordRichPresencePresets
 		public MainWindow()
 		{
 			InitializeComponent();
-			var loadedPresetCollection = LoadPresetCollection("default");
+			var loadedPresetCollection = LoadPresetCollection("default", out Active);
 			Presences = loadedPresetCollection.Any()
 				            ? loadedPresetCollection
 				            : new()
@@ -68,7 +68,7 @@ namespace DiscordRichPresencePresets
 			}
 			else
 			{
-				Presences.SavePresetCollection(dialog.ComboBoxSlots.Text);
+				Presences.SavePresetCollection(dialog.ComboBoxSlots.Text, Active);
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace DiscordRichPresencePresets
 			}
 			else
 			{
-				Presences = LoadPresetCollection(dialog.ComboBoxSlots.Text);
+				Presences = LoadPresetCollection(dialog.ComboBoxSlots.Text, out Active);
 				UpdatePresenceDisplay();
 			}
 		}

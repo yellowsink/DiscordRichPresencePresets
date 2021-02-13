@@ -8,9 +8,14 @@ namespace DiscordRichPresencePresets
 {
 	public static class PresetDataManager
 	{
-		public static void SavePresetCollection(this IEnumerable<Presence> presences, string presetCollectionName)
+		public static void SavePresetCollection(this IEnumerable<Presence> presences, string presetCollectionName,
+		                                        int                        active)
 		{
-			var json        = JsonSerializer.Serialize(presences);
+			var json = JsonSerializer.Serialize(new PresetCollection
+			{
+				Presences = presences.ToArray(),
+				Active    = active
+			});
 			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
 			var saveFolder  = Path.Combine(appDataRoot, "Saved Preset Collections");
@@ -24,7 +29,7 @@ namespace DiscordRichPresencePresets
 			sw.Dispose();
 		}
 
-		public static List<Presence> LoadPresetCollection(string presetCollectionName)
+		public static List<Presence> LoadPresetCollection(string presetCollectionName, out int active)
 		{
 			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
@@ -33,11 +38,15 @@ namespace DiscordRichPresencePresets
 
 			try
 			{
-				var json = File.ReadAllText(fileName);
-				return JsonSerializer.Deserialize<List<Presence>>(json);
+				var json             = File.ReadAllText(fileName);
+				var presetCollection = JsonSerializer.Deserialize<PresetCollection>(json);
+				// ReSharper disable once PossibleNullReferenceException
+				active = presetCollection.Active;
+				return presetCollection.Presences.ToList();
 			}
 			catch (Exception)
 			{
+				active = 0;
 				return new List<Presence>();
 			}
 		}
@@ -50,5 +59,11 @@ namespace DiscordRichPresencePresets
 
 			return new DirectoryInfo(saveFolder).EnumerateFiles().Select(f => f.Name.Split('.')[0]).ToArray();
 		}
+	}
+
+	public class PresetCollection
+	{
+		public int        Active    { get; set; }
+		public Presence[] Presences { get; set; }
 	}
 }
