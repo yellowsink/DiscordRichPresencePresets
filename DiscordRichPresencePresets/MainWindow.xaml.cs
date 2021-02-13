@@ -73,13 +73,16 @@ namespace DiscordRichPresencePresets
 				Data1 = dialog.TextBoxData1.Text,
 				Data2 = dialog.TextBoxData2.Text
 			};
+
+			if (Active == i) MakeActive(i);
+
 			UpdatePresenceDisplay();
 		}
 
 		private void RemovePresence(int i)
 		{
 			Presences.RemoveAt(i);
-			if (Active != 0) Active--;
+			MakeActive(Active != 0 ? Active - 1 : Active);
 			UpdatePresenceDisplay();
 		}
 
