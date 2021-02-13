@@ -5,14 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiscordRichPresencePresets"
         mc:Ignorable="d"
-        Title="Add Presence" Height="250" Width="548">
+        Title="Add Presence" Height="200" Width="500">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
@@ -23,16 +22,13 @@
 
 		<TextBlock Name="TextBlockTitle" Text="Add Presence" Margin="5" Grid.ColumnSpan="2" FontSize="25" />
 
-		<Label Content="Title" Margin="5" Grid.Row="1" />
-		<TextBox Name="TextBoxTitle" Margin="5" Grid.Row="1" Grid.Column="1" />
+		<Label Content="First Row" Margin="5" Grid.Row="1" />
+		<TextBox Name="TextBoxData1" Margin="5" Grid.Row="1" Grid.Column="1" />
 
-		<Label Content="First Row" Margin="5" Grid.Row="2" />
-		<TextBox Name="TextBoxData1" Margin="5" Grid.Row="2" Grid.Column="1" />
+		<Label Content="Second Row" Margin="5" Grid.Row="2" />
+		<TextBox Name="TextBoxData2" Margin="5" Grid.Row="2" Grid.Column="1" />
 
-		<Label Content="Second Row" Margin="5" Grid.Row="3" />
-		<TextBox Name="TextBoxData2" Margin="5" Grid.Row="3" Grid.Column="1" />
-
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="5">
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="4">
 			<Button Content="Cancel" Margin="5" Width="100" Click="ButtonCancel_OnClick" />
 			<Button Content="OK" Margin="5" Width="100" Click="ButtonOk_OnClick" />
 		</StackPanel>

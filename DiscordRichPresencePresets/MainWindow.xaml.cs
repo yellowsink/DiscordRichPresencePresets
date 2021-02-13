@@ -28,7 +28,6 @@ namespace DiscordRichPresencePresets
 				            {
 					            new Presence
 					            {
-						            Title = "Hello, World!",
 						            Data1 = "Welcome to Discord RP Presets",
 						            Data2 = "To get started add a preset!"
 					            }
@@ -46,7 +45,6 @@ namespace DiscordRichPresencePresets
 			if (!result.HasValue || !result.Value) return;
 			Presences.Add(new Presence
 			{
-				Title = dialog.TextBoxTitle.Text,
 				Data1 = dialog.TextBoxData1.Text,
 				Data2 = dialog.TextBoxData2.Text
 			});
@@ -66,14 +64,12 @@ namespace DiscordRichPresencePresets
 			var dialog = new AddDialog();
 			dialog.TextBlockTitle.Text = "Edit Presence"; // Wow this is hacky
 			dialog.Root.Title          = "Edit Presence";
-			dialog.TextBoxTitle.Text   = Presences[i].Title;
 			dialog.TextBoxData1.Text   = Presences[i].Data1;
 			dialog.TextBoxData2.Text   = Presences[i].Data2;
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
 			Presences[i] = new Presence
 			{
-				Title = dialog.TextBoxTitle.Text,
 				Data1 = dialog.TextBoxData1.Text,
 				Data2 = dialog.TextBoxData2.Text
 			};
@@ -102,13 +98,6 @@ namespace DiscordRichPresencePresets
 			for (var i = 0; i < Presences.Count; i++)
 			{
 				var presence = Presences[i];
-				var titleText = new TextBlock
-				{
-					Text              = presence.Title,
-					FontSize          = 18,
-					Margin            = new Thickness(5, 0, 0, 0),
-					VerticalAlignment = VerticalAlignment.Center
-				};
 				var data1Text = new TextBlock
 				{
 					Text              = presence.Data1,
@@ -124,8 +113,7 @@ namespace DiscordRichPresencePresets
 					VerticalAlignment = VerticalAlignment.Center
 				};
 
-				Grid.SetRow(data1Text, 1);
-				Grid.SetRow(data2Text, 2);
+				Grid.SetRow(data2Text, 1);
 
 				var activeButton = new Button
 				{
@@ -144,9 +132,9 @@ namespace DiscordRichPresencePresets
 				};
 
 				var i1 = i;
-				deleteButton.Click += (sender, args) => RemovePresence(i1);
-				activeButton.Click += (sender, args) => MakeActive(i1);
-				editButton.Click   += (sender, args) => EditPresence(i1);
+				deleteButton.Click += (_, _) => RemovePresence(i1);
+				activeButton.Click += (_, _) => MakeActive(i1);
+				editButton.Click   += (_, _) => EditPresence(i1);
 
 				Grid.SetColumn(activeButton, 1);
 				Grid.SetColumn(editButton,   1);
@@ -176,7 +164,6 @@ namespace DiscordRichPresencePresets
 						},
 						Children =
 						{
-							titleText,
 							data1Text,
 							data2Text,
 							activeButton,
