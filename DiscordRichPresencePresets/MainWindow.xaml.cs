@@ -14,14 +14,19 @@ namespace DiscordRichPresencePresets
 	{
 		public List<Presence> Presences;
 
+		public Options Options;
+
 		public int Active;
 
-		public PresenceApiWorker ApiWorker = new("810097912901402654");
+		public PresenceApiWorker ApiWorker;
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			var loadedPresetCollection = LoadPresetCollection("default", out Active);
+
+			Options = new();
+
+			var loadedPresetCollection = LoadPresetCollection(Options.DefaultCollection, out Active);
 			Presences = loadedPresetCollection.Any()
 				            ? loadedPresetCollection
 				            : new()
@@ -32,6 +37,7 @@ namespace DiscordRichPresencePresets
 						            Data2 = "To get started add a preset!"
 					            }
 				            };
+			ApiWorker = new(Options.ClientId);
 
 			ApiWorker.SetRichPresence(Presences[Active]);
 
@@ -103,6 +109,14 @@ namespace DiscordRichPresencePresets
 				MakeActive(Active);
 				UpdatePresenceDisplay();
 			}
+		}
+
+		private void OptionsPopup(object sender, RoutedEventArgs e)
+		{
+			var dialog = new OptionsDialog();
+
+			var result = dialog.ShowDialog();
+			if (!result.HasValue || !result.Value) return;
 		}
 
 		private void EditPresence(int i)
@@ -268,5 +282,12 @@ namespace DiscordRichPresencePresets
 				PanelPresenceList.Children.Add(uiElement);
 			}
 		}
+	}
+
+	public class Options
+	{
+		public string ClientId          = "810097912901402654";
+		public bool   AutoSave          = false;
+		public string DefaultCollection = "default";
 	}
 }

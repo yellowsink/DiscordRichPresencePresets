@@ -10,6 +10,9 @@
     <Compile Update="AddDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="OptionsDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="SaveDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -19,6 +22,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="OptionsDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="SaveDialog.xaml">
