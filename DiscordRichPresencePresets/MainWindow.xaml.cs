@@ -114,7 +114,9 @@ namespace DiscordRichPresencePresets
 				TextBoxData1       = {Text  = Presences[i].Data1},
 				TextBoxData2       = {Text  = Presences[i].Data2},
 				TextBoxBigImgTxt   = {Text  = Presences[i].BigImageText},
-				TextBoxSmallImgTxt = {Text  = Presences[i].SmallImageText}
+				TextBoxSmallImgTxt = {Text  = Presences[i].SmallImageText},
+				TextBoxBigImg      = {Text  = Presences[i].BigImage},
+				TextBoxSmallImg    = {Text  = Presences[i].SmallImage}
 			};
 
 			var result = dialog.ShowDialog();
