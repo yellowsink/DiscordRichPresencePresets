@@ -16,6 +16,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<!-- Spacer Row because I can't be bothered with layout best practices -->
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -30,8 +31,10 @@
 		<TextBox Name="TextBoxDefaultCollection" Grid.Row="2" Grid.Column="1" Margin="5" />
 		
 		<CheckBox Name="CheckBoxAutoSave" Content="Automatically save presences as you edit them" Grid.Row="3" Grid.Column="1" Margin="5" />
+
+		<CheckBox Name="CheckBoxMinify" Content="!!DEBUG - leave this on!! Make saved files as small as possible." Grid.Row="4" Grid.Column="1" Margin="5" />
 		
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="5" Grid.ColumnSpan="4">
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="4">
 			<Button Content="Cancel" Margin="5" Width="100" Click="ButtonCancel_OnClick" />
 			<Button Content="OK" Margin="5" Width="100" Click="ButtonOk_OnClick" />
 		</StackPanel>

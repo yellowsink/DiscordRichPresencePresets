@@ -9,12 +9,15 @@ namespace DiscordRichPresencePresets
 	public static class PresetDataManager
 	{
 		public static void SavePresetCollection(this IEnumerable<Presence> presences, string presetCollectionName,
-		                                        int                        active)
+		                                        int                        active,    bool   minify)
 		{
 			var json = JsonSerializer.Serialize(new PresetCollection
 			{
 				Presences = presences.ToArray(),
 				Active    = active
+			}, new JsonSerializerOptions
+			{
+				WriteIndented = !minify
 			});
 			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
@@ -62,12 +65,12 @@ namespace DiscordRichPresencePresets
 				       : Array.Empty<string>();
 		}
 
-		public static void SaveOptions(Options options)
+		public static void SaveOptions(Options options, bool minify)
 		{
 			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
 			var filePath    = Path.Combine(appDataRoot, "settings.json");
-			var json        = JsonSerializer.Serialize(options);
+			var json        = JsonSerializer.Serialize(options, new JsonSerializerOptions {WriteIndented = !minify});
 
 			Directory.CreateDirectory(appDataRoot);
 			File.WriteAllText(filePath, json);

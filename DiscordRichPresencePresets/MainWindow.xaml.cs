@@ -65,7 +65,7 @@ namespace DiscordRichPresencePresets
 			});
 			UpdatePresenceDisplay();
 
-			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
+			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson);
 		}
 
 		private void SavePresences(object sender, RoutedEventArgs e)
@@ -85,7 +85,8 @@ namespace DiscordRichPresencePresets
 			}
 			else
 			{
-				_presences.SavePresetCollection(dialog.ComboBoxSlots.Text, _active);
+				PresetDataManager.SavePresetCollection(_presences, dialog.ComboBoxSlots.Text, _active,
+				                                       _options.MinifiedJson);
 				_currentCollection = dialog.ComboBoxSlots.Text;
 			}
 		}
@@ -125,7 +126,8 @@ namespace DiscordRichPresencePresets
 			{
 				CheckBoxAutoSave         = {IsChecked = _options.AutoSave},
 				TextBoxClientId          = {Text      = _options.ClientId},
-				TextBoxDefaultCollection = {Text      = _options.DefaultCollection}
+				TextBoxDefaultCollection = {Text      = _options.DefaultCollection},
+				CheckBoxMinify           = {IsChecked = _options.MinifiedJson}
 			};
 
 			var result = dialog.ShowDialog();
@@ -135,8 +137,10 @@ namespace DiscordRichPresencePresets
 			_options.AutoSave          = dialog.CheckBoxAutoSave.IsChecked.Value;
 			_options.ClientId          = dialog.TextBoxClientId.Text;
 			_options.DefaultCollection = dialog.TextBoxDefaultCollection.Text;
+			// ReSharper disable once PossibleInvalidOperationException
+			_options.MinifiedJson = dialog.CheckBoxMinify.IsChecked.Value;
 
-			SaveOptions(_options);
+			SaveOptions(_options, _options.MinifiedJson);
 			_apiWorker.Reset(_options.ClientId);
 			MakeActive(_active);
 		}
@@ -171,7 +175,8 @@ namespace DiscordRichPresencePresets
 
 			UpdatePresenceDisplay();
 
-			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
+			if (_options.AutoSave)
+				PresetDataManager.SavePresetCollection(_presences, _currentCollection, _active, _options.MinifiedJson);
 		}
 
 		private void RemovePresence(int i)
@@ -180,7 +185,8 @@ namespace DiscordRichPresencePresets
 			if (_presences.Count == 0) _apiWorker.RemoveRichPresence();
 			else MakeActive(_active != 0 ? _active - 1 : _active);
 			UpdatePresenceDisplay();
-			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
+			if (_options.AutoSave)
+				PresetDataManager.SavePresetCollection(_presences, _currentCollection, _active, _options.MinifiedJson);
 		}
 
 		private void MakeActive(int i)
@@ -190,7 +196,8 @@ namespace DiscordRichPresencePresets
 			_apiWorker.SetRichPresence(_presences[i]);
 
 			UpdatePresenceDisplay();
-			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
+			if (_options.AutoSave)
+				PresetDataManager.SavePresetCollection(_presences, _currentCollection, _active, _options.MinifiedJson);
 		}
 
 		private void UpdatePresenceDisplay()
