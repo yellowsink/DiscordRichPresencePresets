@@ -113,10 +113,20 @@ namespace DiscordRichPresencePresets
 
 		private void OptionsPopup(object sender, RoutedEventArgs e)
 		{
-			var dialog = new OptionsDialog();
+			var dialog = new OptionsDialog
+			{
+				CheckBoxAutoSave         = {IsChecked = Options.AutoSave},
+				TextBoxClientId          = {Text      = Options.ClientId},
+				TextBoxDefaultCollection = {Text      = Options.DefaultCollection}
+			};
 
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
+
+			// ReSharper disable once PossibleInvalidOperationException
+			Options.AutoSave          = dialog.CheckBoxAutoSave.IsChecked.Value;
+			Options.ClientId          = dialog.TextBoxClientId.Text;
+			Options.DefaultCollection = dialog.TextBoxDefaultCollection.Text;
 		}
 
 		private void EditPresence(int i)
