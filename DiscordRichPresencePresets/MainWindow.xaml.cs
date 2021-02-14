@@ -12,11 +12,6 @@ namespace DiscordRichPresencePresets
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private readonly string[] _images =
-		{
-			"among_drip", "donk", "gura", "nagisa", "thomas_bullshit", "yeetus", "yellowsink_avatar"
-		};
-
 		public List<Presence> Presences;
 
 		public int Active;
@@ -46,11 +41,6 @@ namespace DiscordRichPresencePresets
 		private void AddPresence(object sender, RoutedEventArgs e)
 		{
 			var dialog = new AddDialog();
-			foreach (var image in _images)
-			{
-				dialog.ComboBoxBigImg.Items.Add(image);
-				dialog.ComboBoxSmallImg.Items.Add(image);
-			}
 
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
@@ -58,10 +48,10 @@ namespace DiscordRichPresencePresets
 			{
 				Data1          = dialog.TextBoxData1.Text,
 				Data2          = dialog.TextBoxData2.Text,
-				BigImage       = dialog.ComboBoxBigImg.Text,
-				SmallImage     = dialog.ComboBoxSmallImg.Text,
-				BigImageText   = dialog.TextBoxBigImg.Text,
-				SmallImageText = dialog.TextBoxSmallImg.Text
+				BigImage       = dialog.TextBoxBigImg.Text,
+				SmallImage     = dialog.TextBoxSmallImg.Text,
+				BigImageText   = dialog.TextBoxBigImgTxt.Text,
+				SmallImageText = dialog.TextBoxSmallImgTxt.Text
 			});
 			UpdatePresenceDisplay();
 		}
@@ -119,18 +109,13 @@ namespace DiscordRichPresencePresets
 		{
 			var dialog = new AddDialog
 			{
-				TextBlockTitle  = {Text  = "Edit Presence"},
-				Root            = {Title = "Edit Presence"},
-				TextBoxData1    = {Text  = Presences[i].Data1},
-				TextBoxData2    = {Text  = Presences[i].Data2},
-				TextBoxBigImg   = {Text  = Presences[i].BigImageText},
-				TextBoxSmallImg = {Text  = Presences[i].SmallImageText}
+				TextBlockTitle     = {Text  = "Edit Presence"},
+				Root               = {Title = "Edit Presence"},
+				TextBoxData1       = {Text  = Presences[i].Data1},
+				TextBoxData2       = {Text  = Presences[i].Data2},
+				TextBoxBigImgTxt   = {Text  = Presences[i].BigImageText},
+				TextBoxSmallImgTxt = {Text  = Presences[i].SmallImageText}
 			};
-			foreach (var image in _images)
-			{
-				dialog.ComboBoxBigImg.Items.Add(image);
-				dialog.ComboBoxSmallImg.Items.Add(image);
-			}
 
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
@@ -138,10 +123,10 @@ namespace DiscordRichPresencePresets
 			{
 				Data1          = dialog.TextBoxData1.Text,
 				Data2          = dialog.TextBoxData2.Text,
-				BigImage       = dialog.ComboBoxBigImg.Text,
-				SmallImage     = dialog.ComboBoxSmallImg.Text,
-				BigImageText   = dialog.TextBoxBigImg.Text,
-				SmallImageText = dialog.TextBoxSmallImg.Text
+				BigImage       = dialog.TextBoxBigImg.Text,
+				SmallImage     = dialog.TextBoxSmallImg.Text,
+				BigImageText   = dialog.TextBoxBigImgTxt.Text,
+				SmallImageText = dialog.TextBoxSmallImgTxt.Text
 			};
 
 			if (Active == i) MakeActive(i);
