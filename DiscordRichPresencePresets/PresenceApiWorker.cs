@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using DiscordRPC;
 
 namespace DiscordRichPresencePresets
@@ -30,7 +30,7 @@ namespace DiscordRichPresencePresets
 				Secrets    = null,
 				State      = presence.Data2,
 				Timestamps = null,
-				Buttons    = Array.Empty<Button>()
+				Buttons    = presence.Buttons.Select(b => new Button {Label = b.Text, Url = b.Url}).ToArray()
 			});
 
 			RpcClient.Invoke();
