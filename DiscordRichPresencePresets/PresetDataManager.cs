@@ -57,7 +57,9 @@ namespace DiscordRichPresencePresets
 			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
 			var saveFolder  = Path.Combine(appDataRoot, "Saved Preset Collections");
 
-			return new DirectoryInfo(saveFolder).EnumerateFiles().Select(f => f.Name.Split('.')[0]).ToArray();
+			return Directory.Exists(saveFolder)
+				       ? new DirectoryInfo(saveFolder).EnumerateFiles().Select(f => f.Name.Split('.')[0]).ToArray()
+				       : Array.Empty<string>();
 		}
 	}
 
