@@ -86,6 +86,7 @@ namespace DiscordRichPresencePresets
 			else
 			{
 				_presences.SavePresetCollection(dialog.ComboBoxSlots.Text, _active);
+				_currentCollection = dialog.ComboBoxSlots.Text;
 			}
 		}
 
