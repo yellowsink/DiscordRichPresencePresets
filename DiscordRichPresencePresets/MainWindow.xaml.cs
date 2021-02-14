@@ -12,34 +12,38 @@ namespace DiscordRichPresencePresets
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public List<Presence> Presences;
+		private List<Presence> _presences;
 
-		public Options Options;
+		private readonly Options _options;
 
-		public int Active;
+		private int _active;
 
-		public PresenceApiWorker ApiWorker;
+		private readonly PresenceApiWorker _apiWorker;
+
+		private string _currentCollection;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			Options = LoadOptions();
+			_options = LoadOptions();
 
-			var loadedPresetCollection = LoadPresetCollection(Options.DefaultCollection, out Active);
-			Presences = loadedPresetCollection.Any()
-				            ? loadedPresetCollection
-				            : new()
-				            {
-					            new Presence
-					            {
-						            Data1 = "Welcome to Discord RP Presets",
-						            Data2 = "To get started add a preset!"
-					            }
-				            };
-			ApiWorker = new(Options.ClientId);
+			_currentCollection = _options.DefaultCollection;
 
-			ApiWorker.SetRichPresence(Presences[Active]);
+			var loadedPresetCollection = LoadPresetCollection(_options.DefaultCollection, out _active);
+			_presences = loadedPresetCollection.Any()
+				             ? loadedPresetCollection
+				             : new()
+				             {
+					             new Presence
+					             {
+						             Data1 = "Welcome to Discord RP Presets",
+						             Data2 = "To get started add a preset!"
+					             }
+				             };
+			_apiWorker = new(_options.ClientId);
+
+			_apiWorker.SetRichPresence(_presences[_active]);
 
 			UpdatePresenceDisplay();
 		}
@@ -50,7 +54,7 @@ namespace DiscordRichPresencePresets
 
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
-			Presences.Add(new Presence
+			_presences.Add(new Presence
 			{
 				Data1          = dialog.TextBoxData1.Text,
 				Data2          = dialog.TextBoxData2.Text,
@@ -60,6 +64,8 @@ namespace DiscordRichPresencePresets
 				SmallImageText = dialog.TextBoxSmallImgTxt.Text
 			});
 			UpdatePresenceDisplay();
+
+			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
 		}
 
 		private void SavePresences(object sender, RoutedEventArgs e)
@@ -79,7 +85,7 @@ namespace DiscordRichPresencePresets
 			}
 			else
 			{
-				Presences.SavePresetCollection(dialog.ComboBoxSlots.Text, Active);
+				_presences.SavePresetCollection(dialog.ComboBoxSlots.Text, _active);
 			}
 		}
 
@@ -105,8 +111,9 @@ namespace DiscordRichPresencePresets
 			}
 			else
 			{
-				Presences = LoadPresetCollection(dialog.ComboBoxSlots.Text, out Active);
-				MakeActive(Active);
+				_presences         = LoadPresetCollection(dialog.ComboBoxSlots.Text, out _active);
+				_currentCollection = dialog.ComboBoxSlots.Text;
+				MakeActive(_active);
 				UpdatePresenceDisplay();
 			}
 		}
@@ -115,20 +122,22 @@ namespace DiscordRichPresencePresets
 		{
 			var dialog = new OptionsDialog
 			{
-				CheckBoxAutoSave         = {IsChecked = Options.AutoSave},
-				TextBoxClientId          = {Text      = Options.ClientId},
-				TextBoxDefaultCollection = {Text      = Options.DefaultCollection}
+				CheckBoxAutoSave         = {IsChecked = _options.AutoSave},
+				TextBoxClientId          = {Text      = _options.ClientId},
+				TextBoxDefaultCollection = {Text      = _options.DefaultCollection}
 			};
 
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
 
 			// ReSharper disable once PossibleInvalidOperationException
-			Options.AutoSave          = dialog.CheckBoxAutoSave.IsChecked.Value;
-			Options.ClientId          = dialog.TextBoxClientId.Text;
-			Options.DefaultCollection = dialog.TextBoxDefaultCollection.Text;
+			_options.AutoSave          = dialog.CheckBoxAutoSave.IsChecked.Value;
+			_options.ClientId          = dialog.TextBoxClientId.Text;
+			_options.DefaultCollection = dialog.TextBoxDefaultCollection.Text;
 
-			SaveOptions(Options);
+			SaveOptions(_options);
+			_apiWorker.Reset(_options.ClientId);
+			MakeActive(_active);
 		}
 
 		private void EditPresence(int i)
@@ -137,17 +146,17 @@ namespace DiscordRichPresencePresets
 			{
 				TextBlockTitle     = {Text  = "Edit Presence"},
 				Root               = {Title = "Edit Presence"},
-				TextBoxData1       = {Text  = Presences[i].Data1},
-				TextBoxData2       = {Text  = Presences[i].Data2},
-				TextBoxBigImgTxt   = {Text  = Presences[i].BigImageText},
-				TextBoxSmallImgTxt = {Text  = Presences[i].SmallImageText},
-				TextBoxBigImg      = {Text  = Presences[i].BigImage},
-				TextBoxSmallImg    = {Text  = Presences[i].SmallImage}
+				TextBoxData1       = {Text  = _presences[i].Data1},
+				TextBoxData2       = {Text  = _presences[i].Data2},
+				TextBoxBigImgTxt   = {Text  = _presences[i].BigImageText},
+				TextBoxSmallImgTxt = {Text  = _presences[i].SmallImageText},
+				TextBoxBigImg      = {Text  = _presences[i].BigImage},
+				TextBoxSmallImg    = {Text  = _presences[i].SmallImage}
 			};
 
 			var result = dialog.ShowDialog();
 			if (!result.HasValue || !result.Value) return;
-			Presences[i] = new Presence
+			_presences[i] = new Presence
 			{
 				Data1          = dialog.TextBoxData1.Text,
 				Data2          = dialog.TextBoxData2.Text,
@@ -157,34 +166,38 @@ namespace DiscordRichPresencePresets
 				SmallImageText = dialog.TextBoxSmallImgTxt.Text
 			};
 
-			if (Active == i) MakeActive(i);
+			if (_active == i) MakeActive(i);
 
 			UpdatePresenceDisplay();
+
+			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
 		}
 
 		private void RemovePresence(int i)
 		{
-			Presences.RemoveAt(i);
-			if (Presences.Count == 0) ApiWorker.RemoveRichPresence();
-			else MakeActive(Active != 0 ? Active - 1 : Active);
+			_presences.RemoveAt(i);
+			if (_presences.Count == 0) _apiWorker.RemoveRichPresence();
+			else MakeActive(_active != 0 ? _active - 1 : _active);
 			UpdatePresenceDisplay();
+			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
 		}
 
 		private void MakeActive(int i)
 		{
-			Active = i;
+			_active = i;
 
-			ApiWorker.SetRichPresence(Presences[i]);
+			_apiWorker.SetRichPresence(_presences[i]);
 
 			UpdatePresenceDisplay();
+			if (_options.AutoSave) _presences.SavePresetCollection(_currentCollection, _active);
 		}
 
 		private void UpdatePresenceDisplay()
 		{
 			PanelPresenceList.Children.Clear();
-			for (var i = 0; i < Presences.Count; i++)
+			for (var i = 0; i < _presences.Count; i++)
 			{
-				var presence = Presences[i];
+				var presence = _presences[i];
 				var data1Text = new TextBlock
 				{
 					Text              = presence.Data1,
@@ -258,7 +271,7 @@ namespace DiscordRichPresencePresets
 
 				var uiElement = new Border
 				{
-					BorderBrush     = Active == i ? Brushes.ForestGreen : Brushes.LightGray,
+					BorderBrush     = _active == i ? Brushes.ForestGreen : Brushes.LightGray,
 					BorderThickness = new Thickness(2),
 					Margin          = new Thickness(5),
 					Height          = 100,

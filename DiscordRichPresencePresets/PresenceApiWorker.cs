@@ -5,11 +5,11 @@ namespace DiscordRichPresencePresets
 {
 	public class PresenceApiWorker
 	{
-		private readonly DiscordRpcClient RpcClient;
+		private DiscordRpcClient RpcClient;
 
-		public PresenceApiWorker(string token)
+		public PresenceApiWorker(string clientId)
 		{
-			RpcClient = new(token);
+			RpcClient = new(clientId);
 			RpcClient.Initialize();
 			RpcClient.Invoke();
 		}
@@ -40,6 +40,12 @@ namespace DiscordRichPresencePresets
 		{
 			RpcClient.SetPresence(null);
 			RpcClient.Invoke();
+		}
+
+		public void Reset(string clientId)
+		{
+			RpcClient.Dispose();
+			RpcClient = new DiscordRpcClient(clientId);
 		}
 	}
 }
