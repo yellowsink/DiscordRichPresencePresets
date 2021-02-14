@@ -308,11 +308,4 @@ namespace DiscordRichPresencePresets
 			}
 		}
 	}
-
-	public class Options
-	{
-		public string ClientId          = "810097912901402654";
-		public bool   AutoSave          = false;
-		public string DefaultCollection = "default";
-	}
 }
