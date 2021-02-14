@@ -262,7 +262,8 @@ namespace DiscordRichPresencePresets
 				};
 				var buttonsText = new TextBlock
 				{
-					Text = presence.Buttons.Count(b => !string.IsNullOrWhiteSpace(b.Text)) switch
+					Text = presence.Buttons.Count(b => !string.IsNullOrWhiteSpace(b.Text) &&
+					                                   !string.IsNullOrWhiteSpace(b.Url)) switch
 					{
 						0 => "No buttons",
 						1 => "1 button",

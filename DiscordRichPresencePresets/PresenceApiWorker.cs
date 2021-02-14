@@ -30,7 +30,9 @@ namespace DiscordRichPresencePresets
 				Secrets    = null,
 				State      = presence.Data2,
 				Timestamps = null,
-				Buttons    = presence.Buttons.Select(b => new Button {Label = b.Text, Url = b.Url}).ToArray()
+				Buttons = presence.Buttons
+				                  .Where(b => !string.IsNullOrWhiteSpace(b.Text) && !string.IsNullOrWhiteSpace(b.Url))
+				                  .Select(b => new Button {Label = b.Text, Url = b.Url}).ToArray()
 			});
 
 			RpcClient.Invoke();
