@@ -24,7 +24,7 @@ namespace DiscordRichPresencePresets
 		{
 			InitializeComponent();
 
-			Options = new();
+			Options = LoadOptions();
 
 			var loadedPresetCollection = LoadPresetCollection(Options.DefaultCollection, out Active);
 			Presences = loadedPresetCollection.Any()
@@ -127,6 +127,8 @@ namespace DiscordRichPresencePresets
 			Options.AutoSave          = dialog.CheckBoxAutoSave.IsChecked.Value;
 			Options.ClientId          = dialog.TextBoxClientId.Text;
 			Options.DefaultCollection = dialog.TextBoxDefaultCollection.Text;
+
+			SaveOptions(Options);
 		}
 
 		private void EditPresence(int i)

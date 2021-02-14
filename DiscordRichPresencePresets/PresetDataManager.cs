@@ -61,6 +61,28 @@ namespace DiscordRichPresencePresets
 				       ? new DirectoryInfo(saveFolder).EnumerateFiles().Select(f => f.Name.Split('.')[0]).ToArray()
 				       : Array.Empty<string>();
 		}
+
+		public static void SaveOptions(Options options)
+		{
+			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
+			var filePath    = Path.Combine(appDataRoot, "settings.json");
+			var json        = JsonSerializer.Serialize(options);
+
+			Directory.CreateDirectory(appDataRoot);
+			File.WriteAllText(filePath, json);
+		}
+
+		public static Options LoadOptions()
+		{
+			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
+			var filePath    = Path.Combine(appDataRoot, "settings.json");
+
+			return File.Exists(filePath)
+				       ? JsonSerializer.Deserialize<Options>(File.ReadAllText(filePath))
+				       : new();
+		}
 	}
 
 	public class PresetCollection
