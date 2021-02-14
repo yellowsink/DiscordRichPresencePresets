@@ -38,6 +38,8 @@ namespace DiscordRichPresencePresets
 
 		public void RemoveRichPresence()
 		{
+			RpcClient.SetPresence(null);
+			RpcClient.Invoke();
 		}
 	}
 }

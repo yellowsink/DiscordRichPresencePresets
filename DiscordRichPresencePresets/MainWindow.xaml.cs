@@ -152,7 +152,8 @@ namespace DiscordRichPresencePresets
 		private void RemovePresence(int i)
 		{
 			Presences.RemoveAt(i);
-			MakeActive(Active != 0 ? Active - 1 : Active);
+			if (Presences.Count == 0) ApiWorker.RemoveRichPresence();
+			else MakeActive(Active != 0 ? Active - 1 : Active);
 			UpdatePresenceDisplay();
 		}
 
