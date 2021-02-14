@@ -61,7 +61,12 @@ namespace DiscordRichPresencePresets
 				BigImage       = dialog.TextBoxBigImg.Text,
 				SmallImage     = dialog.TextBoxSmallImg.Text,
 				BigImageText   = dialog.TextBoxBigImgTxt.Text,
-				SmallImageText = dialog.TextBoxSmallImgTxt.Text
+				SmallImageText = dialog.TextBoxSmallImgTxt.Text,
+				Buttons = new List<PresenceButton>
+				{
+					new() {Text = dialog.TextBoxBtnText1.Text, Url = dialog.TextBoxBtnUrl1.Text},
+					new() {Text = dialog.TextBoxBtnText2.Text, Url = dialog.TextBoxBtnUrl2.Text}
+				}
 			});
 			UpdatePresenceDisplay();
 
@@ -147,16 +152,21 @@ namespace DiscordRichPresencePresets
 
 		private void EditPresence(int i)
 		{
+			var p = _presences[i];
 			var dialog = new AddDialog
 			{
 				TextBlockTitle     = {Text  = "Edit Presence"},
 				Root               = {Title = "Edit Presence"},
-				TextBoxData1       = {Text  = _presences[i].Data1},
-				TextBoxData2       = {Text  = _presences[i].Data2},
-				TextBoxBigImgTxt   = {Text  = _presences[i].BigImageText},
-				TextBoxSmallImgTxt = {Text  = _presences[i].SmallImageText},
-				TextBoxBigImg      = {Text  = _presences[i].BigImage},
-				TextBoxSmallImg    = {Text  = _presences[i].SmallImage}
+				TextBoxData1       = {Text  = p.Data1},
+				TextBoxData2       = {Text  = p.Data2},
+				TextBoxBigImgTxt   = {Text  = p.BigImageText},
+				TextBoxSmallImgTxt = {Text  = p.SmallImageText},
+				TextBoxBigImg      = {Text  = p.BigImage},
+				TextBoxSmallImg    = {Text  = p.SmallImage},
+				TextBoxBtnText1    = {Text  = p.Buttons.ElementAtOrDefault(0)?.Text ?? string.Empty},
+				TextBoxBtnUrl1     = {Text  = p.Buttons.ElementAtOrDefault(0)?.Url ?? string.Empty},
+				TextBoxBtnText2    = {Text  = p.Buttons.ElementAtOrDefault(1)?.Text ?? string.Empty},
+				TextBoxBtnUrl2     = {Text  = p.Buttons.ElementAtOrDefault(1)?.Url ?? string.Empty}
 			};
 
 			var result = dialog.ShowDialog();
@@ -168,7 +178,12 @@ namespace DiscordRichPresencePresets
 				BigImage       = dialog.TextBoxBigImg.Text,
 				SmallImage     = dialog.TextBoxSmallImg.Text,
 				BigImageText   = dialog.TextBoxBigImgTxt.Text,
-				SmallImageText = dialog.TextBoxSmallImgTxt.Text
+				SmallImageText = dialog.TextBoxSmallImgTxt.Text,
+				Buttons = new List<PresenceButton>
+				{
+					new() {Text = dialog.TextBoxBtnText1.Text, Url = dialog.TextBoxBtnUrl1.Text},
+					new() {Text = dialog.TextBoxBtnText2.Text, Url = dialog.TextBoxBtnUrl2.Text}
+				}
 			};
 
 			if (_active == i) MakeActive(i);
@@ -176,7 +191,7 @@ namespace DiscordRichPresencePresets
 			UpdatePresenceDisplay();
 
 			if (_options.AutoSave)
-				PresetDataManager.SavePresetCollection(_presences, _currentCollection, _active, _options.MinifiedJson);
+				_presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson);
 		}
 
 		private void RemovePresence(int i)
@@ -245,10 +260,25 @@ namespace DiscordRichPresencePresets
 					Margin            = new Thickness(5, 0, 0, 0),
 					VerticalAlignment = VerticalAlignment.Center
 				};
+				var buttonsText = new TextBlock
+				{
+					Text = presence.Buttons.Count(b => !string.IsNullOrWhiteSpace(b.Text)) switch
+					{
+						0 => "No buttons",
+						1 => "1 button",
+						2 => "2 buttons",
+						_ => string.Empty
+					},
+					FontSize          = 18,
+					Margin            = new Thickness(5, 0, 0, 0),
+					VerticalAlignment = VerticalAlignment.Center
+				};
 
 				Grid.SetRow(smallImgText, 1);
+				Grid.SetRow(buttonsText,  2);
 				Grid.SetColumn(bigImgText,   1);
 				Grid.SetColumn(smallImgText, 1);
+				Grid.SetColumn(buttonsText,  1);
 
 				var activeButton = new Button
 				{
@@ -305,6 +335,7 @@ namespace DiscordRichPresencePresets
 
 							bigImgText,
 							smallImgText,
+							buttonsText,
 
 							activeButton,
 							editButton,
