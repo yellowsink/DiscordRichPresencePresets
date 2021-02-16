@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiscordRichPresencePresets"
         mc:Ignorable="d"
-        Title="Options" Height="300" Width="600">
+        Title="Options" Height="346" Width="600">
     <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
@@ -34,7 +36,18 @@
 
 		<CheckBox Name="CheckBoxMinify" Content="!!DEBUG - leave this on!! Make saved files as small as possible." Grid.Row="4" Grid.Column="1" Margin="5" />
 		
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="4">
+		<Label Content="Preset save location" Grid.Row="5" Margin="5" />
+		<ComboBox Name="ComboBoxSaveLoc" Grid.Row="5" Grid.Column="1" Margin="5" DropDownClosed="ComboBoxSaveLoc_DropDownClosed">
+			<ComboBoxItem Content="Appdata (default)" />
+			<ComboBoxItem Content="Portable" />
+			<ComboBoxItem Content="Documents" />
+			<ComboBoxItem Content="Custom" />
+		</ComboBox>
+		
+		<Label Name="LabelCustomSavePath" Content="Custom save path" Grid.Row="6" Margin="5" />
+		<TextBox Name="TextBoxCustomSavePath" Grid.Row="6" Grid.Column="1" Margin="5" />
+		
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="8" Grid.ColumnSpan="4">
 			<Button Content="Cancel" Margin="5" Width="100" Click="ButtonCancel_OnClick" />
 			<Button Content="OK" Margin="5" Width="100" Click="ButtonOk_OnClick" />
 		</StackPanel>

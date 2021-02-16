@@ -9,7 +9,7 @@ namespace DiscordRichPresencePresets
 	public static class PresetDataManager
 	{
 		public static void SavePresetCollection(this IEnumerable<Presence> presences, string presetCollectionName,
-		                                        int                        active,    bool   minify)
+		                                        int active, bool minify, SaveLocations location, string path = null)
 		{
 			var json = JsonSerializer.Serialize(new PresetCollection
 			{
@@ -19,8 +19,7 @@ namespace DiscordRichPresencePresets
 			{
 				WriteIndented = !minify
 			});
-			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
+			var appDataRoot = BuildSavePath(location, path);
 			var saveFolder  = Path.Combine(appDataRoot, "Saved Preset Collections");
 			var fileName    = Path.Combine(saveFolder,  presetCollectionName + ".json");
 
@@ -32,10 +31,10 @@ namespace DiscordRichPresencePresets
 			sw.Dispose();
 		}
 
-		public static List<Presence> LoadPresetCollection(string presetCollectionName, out int active)
+		public static List<Presence> LoadPresetCollection(string        presetCollectionName, out int active,
+		                                                  SaveLocations location,             string  path = null)
 		{
-			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
+			var appDataRoot = BuildSavePath(location, path);
 			var saveFolder  = Path.Combine(appDataRoot, "Saved Preset Collections");
 			var fileName    = Path.Combine(saveFolder,  presetCollectionName + ".json");
 
@@ -54,10 +53,9 @@ namespace DiscordRichPresencePresets
 			}
 		}
 
-		public static string[] GetPresetCollections()
+		public static string[] GetPresetCollections(SaveLocations location, string path = null)
 		{
-			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
+			var appDataRoot = BuildSavePath(location, path);
 			var saveFolder  = Path.Combine(appDataRoot, "Saved Preset Collections");
 
 			return Directory.Exists(saveFolder)
@@ -65,10 +63,12 @@ namespace DiscordRichPresencePresets
 				       : Array.Empty<string>();
 		}
 
-		public static void SaveOptions(Options options, bool minify)
+		public static void SaveOptions(Options options, bool minify, SaveLocations location)
 		{
-			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
+			if (location == SaveLocations.Custom)
+				location = SaveLocations.Portable;
+
+			var appDataRoot = BuildSavePath(location);
 			var filePath    = Path.Combine(appDataRoot, "settings.json");
 			var json        = JsonSerializer.Serialize(options, new JsonSerializerOptions {WriteIndented = !minify});
 
@@ -78,13 +78,48 @@ namespace DiscordRichPresencePresets
 
 		public static Options LoadOptions()
 		{
-			var appData     = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			var appDataRoot = Path.Combine(appData,     "Cain Atkinson/Discord Rich Presence Presets");
-			var filePath    = Path.Combine(appDataRoot, "settings.json");
+			// try all possible paths
+			var appdata   = BuildSavePath(SaveLocations.Appdata);
+			var portable  = BuildSavePath(SaveLocations.Portable);
+			var documents = BuildSavePath(SaveLocations.Documents);
+			var filePath  = Path.Combine(appdata, "settings.json");
 
-			return File.Exists(filePath)
-				       ? JsonSerializer.Deserialize<Options>(File.ReadAllText(filePath))
-				       : new();
+			var current = SaveLocations.Appdata;
+			tryLoad:
+			if (File.Exists(filePath)) return JsonSerializer.Deserialize<Options>(File.ReadAllText(filePath));
+			// ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+			switch (current)
+			{
+				case SaveLocations.Appdata:
+					filePath = Path.Combine(portable, "settings.json");
+					current  = SaveLocations.Portable;
+					goto tryLoad;
+				case SaveLocations.Portable:
+					filePath = Path.Combine(documents, "settings.json");
+					current  = SaveLocations.Documents;
+					goto tryLoad;
+				case SaveLocations.Documents:
+					return new();
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		private static string BuildSavePath(SaveLocations location, string customDir = null)
+		{
+			var relativePath = "Cain Atkinson/Discord Rich Presence Presets";
+			return location switch
+			{
+				SaveLocations.Appdata =>
+					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), relativePath),
+				SaveLocations.Portable =>
+					Path.Combine(Environment.CurrentDirectory, "data"),
+				SaveLocations.Documents =>
+					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), relativePath),
+				SaveLocations.Custom =>
+					customDir ?? throw new ArgumentException("Custom dir was null", nameof(customDir)),
+				_ => throw new ArgumentOutOfRangeException(nameof(location), location, null)
+			};
 		}
 	}
 
