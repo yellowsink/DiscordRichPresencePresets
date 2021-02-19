@@ -12,16 +12,16 @@ namespace DiscordRichPresencePresets.Avalonia
 {
 	public class MainWindow : Window
 	{
-		private List<Presence> _presences = new()
+		private readonly List<Presence> _presences = new()
 		{
-			new()
+			new Presence()
 			{
 				Data1 = "Welcome to Discord RP Presets",
 				Data2 = "To get started add a preset!"
 			}
 		};
 
-		private int _active = 0;
+		private readonly int _active = 0;
 
 		public MainWindow()
 		{
@@ -29,31 +29,19 @@ namespace DiscordRichPresencePresets.Avalonia
 #if DEBUG
 			this.AttachDevTools();
 #endif
-			
+
 			UpdatePresenceDisplay();
 		}
-		
-		private void AddPresence(object? sender, RoutedEventArgs e)
-		{
-			
-		}
 
-		private void SavePresences(object? sender, RoutedEventArgs e)
-		{
-			
-		}
+		private void AddPresence(object? sender, RoutedEventArgs e) { }
 
-		private void LoadPresences(object? sender, RoutedEventArgs e)
-		{
-			
-		}
+		private void SavePresences(object? sender, RoutedEventArgs e) { }
 
-		private void OptionsPopup(object? sender, RoutedEventArgs e)
-		{
-			
-		}
-		
-			private void UpdatePresenceDisplay()
+		private void LoadPresences(object? sender, RoutedEventArgs e) { }
+
+		private void OptionsPopup(object? sender, RoutedEventArgs e) { }
+
+		private void UpdatePresenceDisplay()
 		{
 			var panelPresenceList = this.FindControl<Panel>("PanelPresenceList");
 			panelPresenceList.Children.Clear();
@@ -102,7 +90,7 @@ namespace DiscordRichPresencePresets.Avalonia
 				var buttonsText = new TextBlock
 				{
 					Text = presence.Buttons.Count(b => !string.IsNullOrWhiteSpace(b.Text) &&
-					                                   !string.IsNullOrWhiteSpace(b.Url)) switch
+													   !string.IsNullOrWhiteSpace(b.Url)) switch
 					{
 						0 => "No buttons",
 						1 => "1 button",
@@ -122,18 +110,27 @@ namespace DiscordRichPresencePresets.Avalonia
 
 				var activeButton = new Button
 				{
-					Content = "Make Active",
-					Margin  = new Thickness(5)
+					Content                    = "Make Active",
+					Margin                     = new Thickness(5),
+					Padding                    = new Thickness(5, 2),
+					HorizontalAlignment        = HorizontalAlignment.Stretch,
+					HorizontalContentAlignment = HorizontalAlignment.Center
 				};
 				var editButton = new Button
 				{
-					Content = "Edit",
-					Margin  = new Thickness(5)
+					Content                    = "Edit",
+					Margin                     = new Thickness(5),
+					Padding                    = new Thickness(5, 2),
+					HorizontalAlignment        = HorizontalAlignment.Stretch,
+					HorizontalContentAlignment = HorizontalAlignment.Center
 				};
 				var deleteButton = new Button
 				{
-					Content = "Delete",
-					Margin  = new Thickness(5)
+					Content                    = "Delete",
+					Margin                     = new Thickness(5),
+					Padding                    = new Thickness(5, 2),
+					HorizontalAlignment        = HorizontalAlignment.Stretch,
+					HorizontalContentAlignment = HorizontalAlignment.Center
 				};
 
 				var i1 = i;

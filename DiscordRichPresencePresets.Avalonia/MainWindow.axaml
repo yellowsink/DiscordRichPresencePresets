@@ -22,10 +22,10 @@
 		<TextBlock Text="Discord Rich Presence Presets" FontSize="25" Margin="5,5,0,5" Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="0" />
 
 		<!-- Action buttons -->
-		<Button Content="Add" Margin="5,5,5,5" Grid.Row="1" Grid.Column="0" Click="AddPresence" />
-		<Button Content="Load" Margin="5,5,5,5" Grid.Row="1" Grid.Column="1" Click="LoadPresences" />
-		<Button Content="Save" Margin="5,5,3,5" Grid.Row="1" Grid.Column="2" Click="SavePresences" />
-		<Button Content="Options" Margin="5,5,3,5" Grid.Row="1" Grid.Column="3" Click="OptionsPopup" />
+		<Button Content="Add" Margin="5,5,5,5" Grid.Row="1" Grid.Column="0" Click="AddPresence" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+		<Button Content="Load" Margin="5,5,5,5" Grid.Row="1" Grid.Column="1" Click="LoadPresences" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+		<Button Content="Save" Margin="5,5,3,5" Grid.Row="1" Grid.Column="2" Click="SavePresences" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+		<Button Content="Options" Margin="5,5,3,5" Grid.Row="1" Grid.Column="3" Click="OptionsPopup" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
 
 		<!-- List of presences -->
 		<ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Top">
