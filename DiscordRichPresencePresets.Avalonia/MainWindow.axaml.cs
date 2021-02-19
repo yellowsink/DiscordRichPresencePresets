@@ -8,6 +8,7 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using DiscordRichPresencePresets.Shared;
+using static DiscordRichPresencePresets.Shared.PresetDataManager;
 
 namespace DiscordRichPresencePresets.Avalonia
 {
@@ -36,6 +37,26 @@ namespace DiscordRichPresencePresets.Avalonia
 #if DEBUG
 			this.AttachDevTools();
 #endif
+
+			_options = LoadOptions();
+
+			_currentCollection = _options.DefaultCollection;
+
+			var loadedPresetCollection = LoadPresetCollection(_options.DefaultCollection, out _active,
+															  _options.SaveLocation,      _options.CustomSavePath);
+			_presences = loadedPresetCollection.Any()
+				? loadedPresetCollection
+				: new()
+				{
+					new Presence
+					{
+						Data1 = "Welcome to Discord RP Presets",
+						Data2 = "To get started add a preset!"
+					}
+				};
+			_apiWorker = new(_options.ClientId);
+
+			_apiWorker.SetRichPresence(_presences[_active]);
 
 			UpdatePresenceDisplay();
 		}
