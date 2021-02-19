@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordRichPresencePresets.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordRichPresencePresets.Shared", "DiscordRichPresencePresets.Shared\DiscordRichPresencePresets.Shared.csproj", "{D0E58095-17E8-43DF-B1A1-B44935346958}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordRichPresencePresets.Avalonia", "DiscordRichPresencePresets.Avalonia\DiscordRichPresencePresets.Avalonia.csproj", "{4F8AC7FC-C816-422D-9202-0ADAC452B11D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D0E58095-17E8-43DF-B1A1-B44935346958}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0E58095-17E8-43DF-B1A1-B44935346958}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0E58095-17E8-43DF-B1A1-B44935346958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F8AC7FC-C816-422D-9202-0ADAC452B11D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F8AC7FC-C816-422D-9202-0ADAC452B11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F8AC7FC-C816-422D-9202-0ADAC452B11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F8AC7FC-C816-422D-9202-0ADAC452B11D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
