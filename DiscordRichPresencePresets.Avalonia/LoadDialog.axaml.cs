@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace DiscordRichPresencePresets.Avalonia
 {
-	public class SaveDialog : Window
+	public class LoadDialog : Window
 	{
-		public SaveDialog()
+		public LoadDialog()
 		{
 			AvaloniaXamlLoader.Load(this);
 		}

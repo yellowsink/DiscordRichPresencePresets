@@ -103,7 +103,7 @@ namespace DiscordRichPresencePresets.Avalonia
 		{
 			var presenceSlots = GetPresetCollections(_options.SaveLocation, _options.CustomSavePath);
 
-			var dialog = new SaveDialog();
+			var dialog = new LoadDialog();
 			dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedIndex = 0;
 			dialog.FindControl<TextBlock>("TextBlockTitle").Text          = "Load Presences";
 			dialog.Title                                                = "Load Presences";
@@ -113,7 +113,7 @@ namespace DiscordRichPresencePresets.Avalonia
 
 			if (string.IsNullOrWhiteSpace((string?) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem))
 			{
-				MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please choose a collection");
+				await MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please choose a collection").ShowDialog(this);
 				// ReSharper disable once TailRecursiveCall
 				LoadPresences(); // ooh recursion
 			}
