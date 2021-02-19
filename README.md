@@ -9,7 +9,7 @@ If you're on Linux or macOS, you can't use the stable build. Check out [MoltenCo
 ## Beta for Windows, Linux, macOS (AvaloniaUI)
 **⚠ THIS VERSION IS IN BETA AND MAY HAVE BUGS. PLEASE MAKE SURE TO OPEN ISSUES IF YOU FIND THEM!!! It is only tested on Linux. ⚠**  
 Grab a release from the [releases](https://github.com/cainy-a/DiscordRichPresencePresets/releases) which is tagged as `avalonia-v_._` instead of `v_._`.
-Extract the zip for your platform, then run the `.exe`, `.app`, or Linux binary.
+Extract the zip for your platform, then run the `.exe` on Windows or the binary on macOS and Linux.
 # Preview
 This is a (very slightly less than last time) BETA™ preview.  
 ![Beta](https://drawing-some.femboy.art/a0762Ca.gif)
