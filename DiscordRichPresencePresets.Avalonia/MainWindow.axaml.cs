@@ -95,7 +95,29 @@ namespace DiscordRichPresencePresets.Avalonia
 				                                _options.SaveLocation, _options.CustomSavePath);
 		}
 
-		private void SavePresences(object? sender, RoutedEventArgs e) { }
+		private void SavePresences(object? sender, RoutedEventArgs e) => SavePresences();
+
+		private async Task SavePresences()
+		{
+			// var presenceSlots = GetPresetCollections(_options.SaveLocation, _options.CustomSavePath);
+
+			var dialog = new SaveDialog();
+
+			if (!await dialog.ShowDialog<bool>(this)) return;
+
+			if (string.IsNullOrWhiteSpace(dialog.FindControl<TextBox>("TextBoxSlots").Text))
+			{
+				await MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please name the collection").ShowDialog(this);
+				SavePresences(); // ooh recursion
+			}
+			else
+			{
+				_presences.SavePresetCollection(dialog.FindControl<TextBox>("TextBoxSlots").Text, _active,
+												_options.MinifiedJson, _options.SaveLocation,
+												_options.CustomSavePath);
+				_currentCollection = dialog.FindControl<TextBox>("TextBoxSlots").Text;
+			}
+		}
 
 		private void LoadPresences(object? sender, RoutedEventArgs e) => LoadPresences();
 
@@ -104,9 +126,6 @@ namespace DiscordRichPresencePresets.Avalonia
 			var presenceSlots = GetPresetCollections(_options.SaveLocation, _options.CustomSavePath);
 
 			var dialog = new LoadDialog();
-			dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedIndex = 0;
-			dialog.FindControl<TextBlock>("TextBlockTitle").Text          = "Load Presences";
-			dialog.Title                                                = "Load Presences";
 			dialog.FindControl<ComboBox>("ComboBoxSlots").Items         = presenceSlots;
 
 			if (!await dialog.ShowDialog<bool>(this)) return;
