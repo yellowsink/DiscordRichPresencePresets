@@ -4,6 +4,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DiscordRichPresencePresets.Avalonia.MainWindow"
-        Title="DiscordRichPresencePresets.Avalonia">
-    Welcome to Avalonia!
+        Title="Discord RP Presets" Height="500" Width="650">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<!-- Title -->
+		<TextBlock Text="Discord Rich Presence Presets" FontSize="25" Margin="5,5,0,5" Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="0" />
+
+		<!-- Action buttons -->
+		<Button Content="Add" Margin="5,5,5,5" Grid.Row="1" Grid.Column="0" Click="AddPresence" />
+		<Button Content="Load" Margin="5,5,5,5" Grid.Row="1" Grid.Column="1" Click="LoadPresences" />
+		<Button Content="Save" Margin="5,5,3,5" Grid.Row="1" Grid.Column="2" Click="SavePresences" />
+		<Button Content="Options" Margin="5,5,3,5" Grid.Row="1" Grid.Column="3" Click="OptionsPopup" />
+
+		<!-- List of presences -->
+		<ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Top">
+			<StackPanel Name="PanelPresenceList">
+				<!-- The following code has been re-written as C# objects and will be dynamically added -->
+
+				<!--<Border BorderBrush="Lightgray" BorderThickness="2" Margin="5" Height="100" Width="400">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<TextBlock Text="Title" FontSize="18" Margin="5,0" VerticalAlignment="Center" />
+					<TextBlock Text="Data1" FontSize="18" Grid.Row="1" Margin="5,0" VerticalAlignment="Center" />
+					<TextBlock Text="Data2" FontSize="18" Grid.Row="2" Margin="5,0" VerticalAlignment="Center" />
+
+					<Button Content="Make Active" Grid.Column="1" Margin="5" />
+					<Button Content="Edit" Grid.Column="1" Margin="5" Grid.Row="1" />
+					<Button Content="Delete" Grid.Column="1" Margin="5" Grid.Row="2" />
+				</Grid>
+			</Border>-->
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
 </Window>
