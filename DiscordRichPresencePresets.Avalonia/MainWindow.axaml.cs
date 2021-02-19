@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -21,7 +22,13 @@ namespace DiscordRichPresencePresets.Avalonia
 			}
 		};
 
-		private readonly int _active = 0;
+		private readonly Options _options;
+
+		private int _active;
+
+		private readonly PresenceApiWorker _apiWorker;
+
+		private string _currentCollection;
 
 		public MainWindow()
 		{
@@ -33,17 +40,120 @@ namespace DiscordRichPresencePresets.Avalonia
 			UpdatePresenceDisplay();
 		}
 
-		private void AddPresence(object? sender, RoutedEventArgs e) { }
+#pragma warning disable 4014
+		private void AddPresence(object? sender, RoutedEventArgs e) => AddPresence();
+#pragma warning restore 4014
+
+		private async Task AddPresence()
+		{
+			var dialog = new AddDialog();
+
+			if (!await dialog.ShowDialog<bool>(this)) return;
+
+			_presences.Add(new()
+			{
+				Data1          = dialog.FindControl<TextBox>("TextBoxData1").Text,
+				Data2          = dialog.FindControl<TextBox>("TextBoxData2").Text,
+				BigImage       = dialog.FindControl<TextBox>("TextBoxBigImg").Text,
+				SmallImage     = dialog.FindControl<TextBox>("TextBoxSmallImg").Text,
+				BigImageText   = dialog.FindControl<TextBox>("TextBoxBigImgTxt").Text,
+				SmallImageText = dialog.FindControl<TextBox>("TextBoxSmallImgTxt").Text,
+				Buttons = new List<PresenceButton>
+				{
+					new()
+					{
+						Text = dialog.FindControl<TextBox>("TextBoxBtnText1").Text,
+						Url  = dialog.FindControl<TextBox>("TextBoxBtnUrl1").Text
+					},
+					new()
+					{
+						Text = dialog.FindControl<TextBox>("TextBoxBtnText2").Text,
+						Url  = dialog.FindControl<TextBox>("TextBoxBtnUrl2").Text
+					}
+				}
+			});
+
+			UpdatePresenceDisplay();
+
+			if (_options.AutoSave)
+				_presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson,
+				                                _options.SaveLocation, _options.CustomSavePath);
+		}
 
 		private void SavePresences(object? sender, RoutedEventArgs e) { }
 
 		private void LoadPresences(object? sender, RoutedEventArgs e) { }
 
 		private void OptionsPopup(object? sender, RoutedEventArgs e) { }
+		
+		private async Task EditPresence(int i)
+		{
+			var p = _presences[i];
+			var dialog = new AddDialog {Title = "Edit Presence"};
+			dialog.FindControl<TextBlock>("TextBlockTitle").Text = "Edit Presence";
+			dialog.FindControl<TextBox>("TextBoxData1").Text = p.Data1;
+			dialog.FindControl<TextBox>("TextBoxData2").Text = p.Data2;
+			dialog.FindControl<TextBox>("TextBoxBigImgTxt").Text = p.BigImageText;
+			dialog.FindControl<TextBox>("TextBoxSmallImgTxt").Text = p.SmallImageText;
+			dialog.FindControl<TextBox>("TextBoxBigImg").Text = p.BigImage;
+			dialog.FindControl<TextBox>("TextBoxSmallImg").Text = p.SmallImage;
+			dialog.FindControl<TextBox>("TextBoxBtnText1").Text = p.Buttons.ElementAtOrDefault(0)?.Text ?? string.Empty;
+			dialog.FindControl<TextBox>("TextBoxBtnUrl1").Text = p.Buttons.ElementAtOrDefault(0)?.Url ?? string.Empty;
+			dialog.FindControl<TextBox>("TextBoxBtnText2").Text = p.Buttons.ElementAtOrDefault(1)?.Text ?? string.Empty;
+			dialog.FindControl<TextBox>("TextBoxBtnUrl2").Text = p.Buttons.ElementAtOrDefault(1)?.Url ?? string.Empty;
+
+			if (!await dialog.ShowDialog<bool>(this)) return;
+			
+			_presences[i] = new Presence
+			{
+				Data1          = dialog.FindControl<TextBox>("TextBoxData1").Text,
+				Data2          = dialog.FindControl<TextBox>("TextBoxData2").Text,
+				BigImage       = dialog.FindControl<TextBox>("TextBoxBigImg").Text,
+				SmallImage     = dialog.FindControl<TextBox>("TextBoxSmallImg").Text,
+				BigImageText   = dialog.FindControl<TextBox>("TextBoxBigImgTxt").Text,
+				SmallImageText = dialog.FindControl<TextBox>("TextBoxSmallImgTxt").Text,
+				Buttons = new List<PresenceButton>
+				{
+					new() {Text = dialog.FindControl<TextBox>("TextBoxBtnText1").Text, Url = dialog.FindControl<TextBox>("TextBoxBtnUrl1").Text},
+					new() {Text = dialog.FindControl<TextBox>("TextBoxBtnText2").Text, Url = dialog.FindControl<TextBox>("TextBoxBtnUrl2").Text}
+				}
+			};
+
+			if (_active == i) MakeActive(i);
+
+			UpdatePresenceDisplay();
+
+			if (_options.AutoSave)
+				_presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson,
+				                                _options.SaveLocation, _options.CustomSavePath);
+		}
+
+		private void RemovePresence(int i)
+		{
+			_presences.RemoveAt(i);
+			if (_presences.Count == 0) _apiWorker.RemoveRichPresence();
+			else MakeActive(_active != 0 ? _active - 1 : _active);
+			UpdatePresenceDisplay();
+			if (_options.AutoSave)
+				_presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson,
+												_options.SaveLocation, _options.CustomSavePath);
+		}
+
+		private void MakeActive(int i)
+		{
+			_active = i;
+
+			_apiWorker.SetRichPresence(_presences[i]);
+
+			UpdatePresenceDisplay();
+			if (_options.AutoSave)
+				_presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson,
+												_options.SaveLocation, _options.CustomSavePath);
+		}
 
 		private void UpdatePresenceDisplay()
 		{
-			var panelPresenceList = this.FindControl<Panel>("PanelPresenceList");
+			var panelPresenceList = this.FindControl<StackPanel>("PanelPresenceList");
 			panelPresenceList.Children.Clear();
 			for (var i = 0; i < _presences.Count; i++)
 			{
@@ -110,33 +220,24 @@ namespace DiscordRichPresencePresets.Avalonia
 
 				var activeButton = new Button
 				{
-					Content                    = "Make Active",
-					Margin                     = new Thickness(5),
-					Padding                    = new Thickness(5, 2),
-					HorizontalAlignment        = HorizontalAlignment.Stretch,
-					HorizontalContentAlignment = HorizontalAlignment.Center
+					Content = "Make Active",
+					Classes = new Classes("actionbutton", "compactbutton")
 				};
 				var editButton = new Button
 				{
-					Content                    = "Edit",
-					Margin                     = new Thickness(5),
-					Padding                    = new Thickness(5, 2),
-					HorizontalAlignment        = HorizontalAlignment.Stretch,
-					HorizontalContentAlignment = HorizontalAlignment.Center
+					Content = "Edit",
+					Classes = new Classes("actionbutton", "compactbutton")
 				};
 				var deleteButton = new Button
 				{
-					Content                    = "Delete",
-					Margin                     = new Thickness(5),
-					Padding                    = new Thickness(5, 2),
-					HorizontalAlignment        = HorizontalAlignment.Stretch,
-					HorizontalContentAlignment = HorizontalAlignment.Center
+					Content = "Delete",
+					Classes = new Classes("actionbutton", "compactbutton")
 				};
 
 				var i1 = i;
-				// deleteButton.Click += (_, _) => RemovePresence(i1);
-				// activeButton.Click += (_, _) => MakeActive(i1);
-				// editButton.Click   += (_, _) => EditPresence(i1);
+				deleteButton.Click += (_,       _) => RemovePresence(i1);
+				activeButton.Click += (_,       _) => MakeActive(i1);
+				editButton.Click   += async (_, _) => await EditPresence(i1);
 
 				Grid.SetColumn(activeButton, 2);
 				Grid.SetColumn(editButton,   2);
