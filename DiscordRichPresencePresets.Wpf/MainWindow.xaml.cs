@@ -3,8 +3,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using DiscordRichPresencePresets.Wpf.Shared;
-using static DiscordRichPresencePresets.Wpf.Shared.PresetDataManager;
+using DiscordRichPresencePresets.Shared;
+using static DiscordRichPresencePresets.Shared.PresetDataManager;
 
 namespace DiscordRichPresencePresets.Wpf
 {
