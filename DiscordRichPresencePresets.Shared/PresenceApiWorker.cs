@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using DiscordRPC;
 
-namespace DiscordRichPresencePresets
+namespace DiscordRichPresencePresets.Shared
 {
 	public class PresenceApiWorker
 	{

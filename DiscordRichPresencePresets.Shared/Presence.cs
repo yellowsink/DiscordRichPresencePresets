@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DiscordRichPresencePresets
+namespace DiscordRichPresencePresets.Shared
 {
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 	[SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Global")]

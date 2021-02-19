@@ -1,4 +1,4 @@
-﻿namespace DiscordRichPresencePresets
+﻿namespace DiscordRichPresencePresets.Shared
 {
 	public class Options
 	{
