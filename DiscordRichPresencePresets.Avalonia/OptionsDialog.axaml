@@ -1,0 +1,47 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DiscordRichPresencePresets.Avalonia.OptionsDialog"
+        Title="Options" Height="350" Width="600">
+	<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,*">
+		<Grid.Styles>
+			<Style Selector="Button,ComboBox">
+				<Setter Property="Margin" Value="5" />
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+			</Style>
+			<Style Selector="Button">
+				<Setter Property="HorizontalContentAlignment" Value="Center" />
+			</Style>
+		</Grid.Styles>
+
+		<TextBlock Text="Options" FontSize="25" Margin="5" Grid.ColumnSpan="2" />
+		
+	    <Label Content="Client ID" Grid.Row="1" Grid.Column="0" Margin="5" />
+		<TextBox Name="TextBoxClientId" Grid.Row="1" Grid.Column="1" Margin="5" />
+		
+		<Label Content="Default collection" Grid.Row="2" Grid.Column="0" Margin="5" />
+		<TextBox Name="TextBoxDefaultCollection" Grid.Row="2" Grid.Column="1" Margin="5" />
+		
+		<CheckBox Name="CheckBoxAutoSave" Content="Automatically save presences as you edit them" Grid.Row="3" Grid.Column="1" Margin="5" />
+
+		<CheckBox Name="CheckBoxMinify" Content="!!DEBUG - leave this on!! Make saved files as small as possible." Grid.Row="4" Grid.Column="1" Margin="5" />
+		
+		<Label Content="Preset save location" Grid.Row="5" Grid.Column="0" Margin="5" />
+		<ComboBox Name="ComboBoxSaveLoc" Grid.Row="5" Grid.Column="1" SelectionChanged="ComboBoxSaveLoc_SelectionChanged">
+			<ComboBoxItem Content="Appdata (default)" />
+			<ComboBoxItem Content="Portable" />
+			<ComboBoxItem Content="Documents" />
+			<ComboBoxItem Content="Custom" />
+		</ComboBox>
+		
+		<Label Name="LabelCustomSavePath" Content="Custom save path" Grid.Row="6" Grid.Column="0" Margin="5" />
+		<TextBox Name="TextBoxCustomSavePath" Grid.Row="6" Grid.Column="1" Margin="5" />
+		
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0">
+			<Button Content="Cancel" Width="100" Click="ButtonCancel_OnClick" />
+			<Button Content="OK" Width="100" Click="ButtonOk_OnClick" />
+		</StackPanel>
+	</Grid>
+</Window>

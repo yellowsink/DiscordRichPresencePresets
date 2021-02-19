@@ -9,6 +9,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using DiscordRichPresencePresets.Shared;
 using static DiscordRichPresencePresets.Shared.PresetDataManager;
+#pragma warning disable 4014
 
 namespace DiscordRichPresencePresets.Avalonia
 {
@@ -61,9 +62,7 @@ namespace DiscordRichPresencePresets.Avalonia
 			UpdatePresenceDisplay();
 		}
 
-#pragma warning disable 4014
 		private void AddPresence(object? sender, RoutedEventArgs e) => AddPresence();
-#pragma warning restore 4014
 
 		private async Task AddPresence()
 		{
@@ -105,7 +104,35 @@ namespace DiscordRichPresencePresets.Avalonia
 
 		private void LoadPresences(object? sender, RoutedEventArgs e) { }
 
-		private void OptionsPopup(object? sender, RoutedEventArgs e) { }
+		private void OptionsPopup(object? sender, RoutedEventArgs e) => OptionsPopup();
+
+		private async Task OptionsPopup()
+		{
+			var dialog = new OptionsDialog();
+			dialog.FindControl<CheckBox>("CheckBoxAutoSave").IsChecked    = _options.AutoSave;
+			dialog.FindControl<TextBox>("TextBoxClientId").Text          = _options.ClientId;
+			dialog.FindControl<TextBox>("TextBoxDefaultCollection").Text = _options.DefaultCollection;
+			dialog.FindControl<CheckBox>("CheckBoxMinify").IsChecked      = _options.MinifiedJson;
+			dialog.FindControl<ComboBox>("ComboBoxSaveLoc").SelectedIndex = (int) _options.SaveLocation;
+			dialog.FindControl<TextBox>("TextBoxCustomSavePath").Text    = _options.CustomSavePath ?? string.Empty;
+			
+			dialog.UpdateCustomSavePathBox();
+
+			if (!await dialog.ShowDialog<bool>(this)) return;
+
+			// ReSharper disable once PossibleInvalidOperationException
+			_options.AutoSave          = dialog.FindControl<CheckBox>("CheckBoxAutoSave").IsChecked!.Value;
+			_options.ClientId          = dialog.FindControl<TextBox>("TextBoxClientId").Text;
+			_options.DefaultCollection = dialog.FindControl<TextBox>("TextBoxDefaultCollection").Text;
+			// ReSharper disable once PossibleInvalidOperationException
+			_options.MinifiedJson   = dialog.FindControl<CheckBox>("CheckBoxMinify").IsChecked!.Value;
+			_options.SaveLocation   = (SaveLocations) dialog.FindControl<ComboBox>("ComboBoxSaveLoc").SelectedIndex;
+			_options.CustomSavePath = dialog.FindControl<TextBox>("TextBoxCustomSavePath").Text;
+
+			SaveOptions(_options, _options.MinifiedJson, _options.SaveLocation);
+			_apiWorker.Reset(_options.ClientId);
+			MakeActive(_active);
+		}
 		
 		private async Task EditPresence(int i)
 		{
