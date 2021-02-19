@@ -1,13 +1,13 @@
 ﻿using System.Windows;
 
-namespace DiscordRichPresencePresets
+namespace DiscordRichPresencePresets.Wpf
 {
 	/// <summary>
-	///     Interaction logic for SaveDialog.xaml
+	///     Interaction logic for AddDialog.xaml
 	/// </summary>
-	public partial class SaveDialog : Window
+	public partial class AddDialog : Window
 	{
-		public SaveDialog()
+		public AddDialog()
 		{
 			InitializeComponent();
 		}

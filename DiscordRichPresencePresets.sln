@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordRichPresencePresets", "DiscordRichPresencePresets\DiscordRichPresencePresets.csproj", "{617A2DFC-BC9C-4119-8E6F-BB41BCB025F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordRichPresencePresets.Wpf", "DiscordRichPresencePresets.Wpf\DiscordRichPresencePresets.Wpf.csproj", "{617A2DFC-BC9C-4119-8E6F-BB41BCB025F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordRichPresencePresets.Shared", "DiscordRichPresencePresets.Shared\DiscordRichPresencePresets.Shared.csproj", "{D0E58095-17E8-43DF-B1A1-B44935346958}"
 EndProject

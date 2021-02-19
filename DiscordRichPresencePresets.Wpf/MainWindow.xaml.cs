@@ -3,10 +3,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using DiscordRichPresencePresets.Shared;
-using static DiscordRichPresencePresets.Shared.PresetDataManager;
+using DiscordRichPresencePresets.Wpf.Shared;
+using static DiscordRichPresencePresets.Wpf.Shared.PresetDataManager;
 
-namespace DiscordRichPresencePresets
+namespace DiscordRichPresencePresets.Wpf
 {
 	/// <summary>
 	///     Interaction logic for MainWindow.xaml

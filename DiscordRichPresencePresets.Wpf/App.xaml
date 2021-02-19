@@ -1,7 +1,7 @@
-﻿<Application x:Class="DiscordRichPresencePresets.App"
+﻿<Application x:Class="DiscordRichPresencePresets.Wpf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DiscordRichPresencePresets"
+             xmlns:local="clr-namespace:DiscordRichPresencePresets.Wpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

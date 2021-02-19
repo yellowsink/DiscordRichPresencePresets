@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace DiscordRichPresencePresets
+namespace DiscordRichPresencePresets.Wpf
 {
 	/// <summary>
 	///     Interaction logic for OptionsDialog.xaml
