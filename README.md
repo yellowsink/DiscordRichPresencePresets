@@ -49,7 +49,6 @@ cd DiscordRichPresencePresets.Wpf
 dotnet publish --self-contained false -r win-x64
 ```
 #### AvaloniaUI
-#### WPF
 Assuming you are in the repo root, run the following:
 ```
 cd DiscordRichPresencePresets.Avalonia
