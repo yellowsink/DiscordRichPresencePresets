@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -13,16 +14,10 @@ using static DiscordRichPresencePresets.Shared.PresetDataManager;
 
 namespace DiscordRichPresencePresets.Avalonia
 {
+	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	public class MainWindow : Window
 	{
-		private readonly List<Presence> _presences = new()
-		{
-			new Presence()
-			{
-				Data1 = "Welcome to Discord RP Presets",
-				Data2 = "To get started add a preset!"
-			}
-		};
+		private List<Presence> _presences;
 
 		private readonly Options _options;
 
@@ -102,9 +97,37 @@ namespace DiscordRichPresencePresets.Avalonia
 
 		private void SavePresences(object? sender, RoutedEventArgs e) { }
 
-		private void LoadPresences(object? sender, RoutedEventArgs e) { }
+		private void LoadPresences(object? sender, RoutedEventArgs e) => LoadPresences();
 
-		private void OptionsPopup(object? sender, RoutedEventArgs e) => OptionsPopup();
+		private async Task LoadPresences()
+		{
+			var presenceSlots = GetPresetCollections(_options.SaveLocation, _options.CustomSavePath);
+
+			var dialog = new SaveDialog();
+			dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedIndex = 0;
+			dialog.FindControl<TextBlock>("TextBlockTitle").Text          = "Load Presences";
+			dialog.Title                                                = "Load Presences";
+			dialog.FindControl<ComboBox>("ComboBoxSlots").Items         = presenceSlots;
+
+			if (!await dialog.ShowDialog<bool>(this)) return;
+
+			if (string.IsNullOrWhiteSpace((string?) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem))
+			{
+				MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please choose a collection");
+				// ReSharper disable once TailRecursiveCall
+				LoadPresences(); // ooh recursion
+			}
+			else
+			{
+				_presences = LoadPresetCollection((string?) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem, out _active, _options.SaveLocation,
+												  _options.CustomSavePath);
+				_currentCollection = (string) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem!;
+				MakeActive(_active);
+				UpdatePresenceDisplay();
+			}
+		}
+
+		private void OptionsPopup( object? sender, RoutedEventArgs e) => OptionsPopup();
 
 		private async Task OptionsPopup()
 		{

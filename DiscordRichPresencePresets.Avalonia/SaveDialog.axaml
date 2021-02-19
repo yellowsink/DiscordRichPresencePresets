@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DiscordRichPresencePresets.Avalonia.SaveDialog"
+        Title="Save Presences" Height="200" Width="500">
+	<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,*,Auto">
+		<Grid.Styles>
+			<Style Selector="Button,ComboBox">
+				<Setter Property="Margin" Value="5" />
+				<Setter Property="HorizontalAlignment" Value="Stretch" />
+			</Style>
+			<Style Selector="Button">
+				<Setter Property="HorizontalContentAlignment" Value="Center" />
+			</Style>
+		</Grid.Styles>
+
+		<TextBlock Name="TextBlockTitle" FontSize="25" Text="Save Presences" Grid.ColumnSpan="2" />
+		
+		<Label Grid.Row="1" Content="Preset Collection" />
+		<ComboBox Name="ComboBoxSlots" Grid.Column="1" Grid.Row="1" />
+		
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="4" Grid.ColumnSpan="2">
+			<Button Content="Cancel" Margin="5" Width="100" Click="ButtonCancel_OnClick" />
+			<Button Content="OK" Margin="5" Width="100" Click="ButtonOk_OnClick" />
+		</StackPanel>
+	</Grid>
+</Window>
