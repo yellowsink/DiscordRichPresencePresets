@@ -5,10 +5,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.0" />
+        <!-- Avalonia UI -->
+	    <PackageReference Include="Avalonia" Version="0.10.0" />
         <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.0" />
+        <!-- Avalonia UI extension libs -->
         <PackageReference Include="MessageBox.Avalonia" Version="1.0.5" />
+        <PackageReference Include="Avalonia.ThemeManager" Version="0.10.0" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\DiscordRichPresencePresets.Shared\DiscordRichPresencePresets.Shared.csproj" />

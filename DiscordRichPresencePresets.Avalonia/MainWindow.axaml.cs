@@ -9,7 +9,9 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using DiscordRichPresencePresets.Shared;
+using MessageBox.Avalonia;
 using static DiscordRichPresencePresets.Shared.PresetDataManager;
+
 #pragma warning disable 4014
 
 namespace DiscordRichPresencePresets.Avalonia
@@ -34,22 +36,24 @@ namespace DiscordRichPresencePresets.Avalonia
 			this.AttachDevTools();
 #endif
 
+			App.Selector.EnableThemes(this);
+
 			_options = LoadOptions();
 
 			_currentCollection = _options.DefaultCollection;
 
 			var loadedPresetCollection = LoadPresetCollection(_options.DefaultCollection, out _active,
-															  _options.SaveLocation,      _options.CustomSavePath);
+			                                                  _options.SaveLocation,      _options.CustomSavePath);
 			_presences = loadedPresetCollection.Any()
-				? loadedPresetCollection
-				: new()
-				{
-					new Presence
-					{
-						Data1 = "Welcome to Discord RP Presets",
-						Data2 = "To get started add a preset!"
-					}
-				};
+				             ? loadedPresetCollection
+				             : new()
+				             {
+					             new Presence
+					             {
+						             Data1 = "Welcome to Discord RP Presets",
+						             Data2 = "To get started add a preset!"
+					             }
+				             };
 			_apiWorker = new(_options.ClientId);
 
 			_apiWorker.SetRichPresence(_presences[_active]);
@@ -107,14 +111,15 @@ namespace DiscordRichPresencePresets.Avalonia
 
 			if (string.IsNullOrWhiteSpace(dialog.FindControl<TextBox>("TextBoxSlots").Text))
 			{
-				await MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please name the collection").ShowDialog(this);
+				await MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please name the collection")
+				                       .ShowDialog(this);
 				SavePresences(); // ooh recursion
 			}
 			else
 			{
 				_presences.SavePresetCollection(dialog.FindControl<TextBox>("TextBoxSlots").Text, _active,
-												_options.MinifiedJson, _options.SaveLocation,
-												_options.CustomSavePath);
+				                                _options.MinifiedJson, _options.SaveLocation,
+				                                _options.CustomSavePath);
 				_currentCollection = dialog.FindControl<TextBox>("TextBoxSlots").Text;
 			}
 		}
@@ -126,38 +131,40 @@ namespace DiscordRichPresencePresets.Avalonia
 			var presenceSlots = GetPresetCollections(_options.SaveLocation, _options.CustomSavePath);
 
 			var dialog = new LoadDialog();
-			dialog.FindControl<ComboBox>("ComboBoxSlots").Items         = presenceSlots;
+			dialog.FindControl<ComboBox>("ComboBoxSlots").Items = presenceSlots;
 
 			if (!await dialog.ShowDialog<bool>(this)) return;
 
 			if (string.IsNullOrWhiteSpace((string?) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem))
 			{
-				await MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please choose a collection").ShowDialog(this);
+				await MessageBoxManager.GetMessageBoxStandardWindow("Hold up!", "Please choose a collection")
+				                       .ShowDialog(this);
 				// ReSharper disable once TailRecursiveCall
 				LoadPresences(); // ooh recursion
 			}
 			else
 			{
-				_presences = LoadPresetCollection((string?) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem, out _active, _options.SaveLocation,
-												  _options.CustomSavePath);
+				_presences = LoadPresetCollection((string?) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem,
+				                                  out _active, _options.SaveLocation,
+				                                  _options.CustomSavePath);
 				_currentCollection = (string) dialog.FindControl<ComboBox>("ComboBoxSlots").SelectedItem!;
 				MakeActive(_active);
 				UpdatePresenceDisplay();
 			}
 		}
 
-		private void OptionsPopup( object? sender, RoutedEventArgs e) => OptionsPopup();
+		private void OptionsPopup(object? sender, RoutedEventArgs e) => OptionsPopup();
 
 		private async Task OptionsPopup()
 		{
 			var dialog = new OptionsDialog();
 			dialog.FindControl<CheckBox>("CheckBoxAutoSave").IsChecked    = _options.AutoSave;
-			dialog.FindControl<TextBox>("TextBoxClientId").Text          = _options.ClientId;
-			dialog.FindControl<TextBox>("TextBoxDefaultCollection").Text = _options.DefaultCollection;
+			dialog.FindControl<TextBox>("TextBoxClientId").Text           = _options.ClientId;
+			dialog.FindControl<TextBox>("TextBoxDefaultCollection").Text  = _options.DefaultCollection;
 			dialog.FindControl<CheckBox>("CheckBoxMinify").IsChecked      = _options.MinifiedJson;
 			dialog.FindControl<ComboBox>("ComboBoxSaveLoc").SelectedIndex = (int) _options.SaveLocation;
-			dialog.FindControl<TextBox>("TextBoxCustomSavePath").Text    = _options.CustomSavePath ?? string.Empty;
-			
+			dialog.FindControl<TextBox>("TextBoxCustomSavePath").Text     = _options.CustomSavePath ?? string.Empty;
+
 			dialog.UpdateCustomSavePathBox();
 
 			if (!await dialog.ShowDialog<bool>(this)) return;
@@ -175,7 +182,7 @@ namespace DiscordRichPresencePresets.Avalonia
 			_apiWorker.Reset(_options.ClientId);
 			MakeActive(_active);
 		}
-		
+
 		private async Task EditPresence(int i)
 		{
 			var p = _presences[i];
@@ -193,7 +200,7 @@ namespace DiscordRichPresencePresets.Avalonia
 			dialog.FindControl<TextBox>("TextBoxBtnUrl2").Text = p.Buttons.ElementAtOrDefault(1)?.Url ?? string.Empty;
 
 			if (!await dialog.ShowDialog<bool>(this)) return;
-			
+
 			_presences[i] = new Presence
 			{
 				Data1          = dialog.FindControl<TextBox>("TextBoxData1").Text,
@@ -204,8 +211,16 @@ namespace DiscordRichPresencePresets.Avalonia
 				SmallImageText = dialog.FindControl<TextBox>("TextBoxSmallImgTxt").Text,
 				Buttons = new List<PresenceButton>
 				{
-					new() {Text = dialog.FindControl<TextBox>("TextBoxBtnText1").Text, Url = dialog.FindControl<TextBox>("TextBoxBtnUrl1").Text},
-					new() {Text = dialog.FindControl<TextBox>("TextBoxBtnText2").Text, Url = dialog.FindControl<TextBox>("TextBoxBtnUrl2").Text}
+					new()
+					{
+						Text = dialog.FindControl<TextBox>("TextBoxBtnText1").Text,
+						Url  = dialog.FindControl<TextBox>("TextBoxBtnUrl1").Text
+					},
+					new()
+					{
+						Text = dialog.FindControl<TextBox>("TextBoxBtnText2").Text,
+						Url  = dialog.FindControl<TextBox>("TextBoxBtnUrl2").Text
+					}
 				}
 			};
 
@@ -226,7 +241,7 @@ namespace DiscordRichPresencePresets.Avalonia
 			UpdatePresenceDisplay();
 			if (_options.AutoSave)
 				_presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson,
-												_options.SaveLocation, _options.CustomSavePath);
+				                                _options.SaveLocation, _options.CustomSavePath);
 		}
 
 		private void MakeActive(int i)
@@ -238,7 +253,7 @@ namespace DiscordRichPresencePresets.Avalonia
 			UpdatePresenceDisplay();
 			if (_options.AutoSave)
 				_presences.SavePresetCollection(_currentCollection, _active, _options.MinifiedJson,
-												_options.SaveLocation, _options.CustomSavePath);
+				                                _options.SaveLocation, _options.CustomSavePath);
 		}
 
 		private void UpdatePresenceDisplay()
@@ -290,7 +305,7 @@ namespace DiscordRichPresencePresets.Avalonia
 				var buttonsText = new TextBlock
 				{
 					Text = presence.Buttons.Count(b => !string.IsNullOrWhiteSpace(b.Text) &&
-													   !string.IsNullOrWhiteSpace(b.Url)) switch
+					                                   !string.IsNullOrWhiteSpace(b.Url)) switch
 					{
 						0 => "No buttons",
 						1 => "1 button",
@@ -375,6 +390,9 @@ namespace DiscordRichPresencePresets.Avalonia
 			}
 		}
 
-		private void InitializeComponent() { AvaloniaXamlLoader.Load(this); }
+		private void InitializeComponent()
+		{
+			AvaloniaXamlLoader.Load(this);
+		}
 	}
 }
