@@ -1,4 +1,7 @@
-﻿namespace DiscordRichPresencePresets.Wpf
+﻿using System;
+using System.Windows;
+
+namespace DiscordRichPresencePresets.Wpf
 {
 	/// <summary>
 	///     Interaction logic for OptionsDialog.xaml
