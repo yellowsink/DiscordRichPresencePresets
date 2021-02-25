@@ -40,6 +40,9 @@ namespace DiscordRichPresencePresets.Avalonia
 
 			_options = LoadOptions();
 
+			if (!_options.Extensions.ContainsKey("avalonia"))
+				_options.Extensions.Add("avalonia", new OptionsExtension());
+
 			_currentCollection = _options.DefaultCollection;
 
 			var loadedPresetCollection = LoadPresetCollection(_options.DefaultCollection, out _active,
@@ -158,29 +161,34 @@ namespace DiscordRichPresencePresets.Avalonia
 		private async Task OptionsPopup()
 		{
 			var dialog = new OptionsDialog();
-			dialog.FindControl<CheckBox>("CheckBoxAutoSave").IsChecked    = _options.AutoSave;
-			dialog.FindControl<TextBox>("TextBoxClientId").Text           = _options.ClientId;
-			dialog.FindControl<TextBox>("TextBoxDefaultCollection").Text  = _options.DefaultCollection;
-			dialog.FindControl<CheckBox>("CheckBoxMinify").IsChecked      = _options.MinifiedJson;
-			dialog.FindControl<ComboBox>("ComboBoxSaveLoc").SelectedIndex = (int) _options.SaveLocation;
-			dialog.FindControl<TextBox>("TextBoxCustomSavePath").Text     = _options.CustomSavePath ?? string.Empty;
+			fc("CheckBoxAutoSave").IsChecked    = _options.AutoSave;
+			ft("TextBoxClientId").Text          = _options.ClientId;
+			ft("TextBoxDefaultCollection").Text = _options.DefaultCollection;
+			fc("CheckBoxMinify").IsChecked      = _options.MinifiedJson;
+			fb("ComboBoxSaveLoc").SelectedIndex = (int) _options.SaveLocation;
+			ft("TextBoxCustomSavePath").Text    = _options.CustomSavePath ?? string.Empty;
+			fc("CheckBoxDark").IsChecked        = ((OptionsExtension) _options.Extensions["avalonia"]).UseDarkTheme;
 
 			dialog.UpdateCustomSavePathBox();
 
 			if (!await dialog.ShowDialog<bool>(this)) return;
 
-			// ReSharper disable once PossibleInvalidOperationException
-			_options.AutoSave          = dialog.FindControl<CheckBox>("CheckBoxAutoSave").IsChecked!.Value;
-			_options.ClientId          = dialog.FindControl<TextBox>("TextBoxClientId").Text;
-			_options.DefaultCollection = dialog.FindControl<TextBox>("TextBoxDefaultCollection").Text;
-			// ReSharper disable once PossibleInvalidOperationException
-			_options.MinifiedJson   = dialog.FindControl<CheckBox>("CheckBoxMinify").IsChecked!.Value;
-			_options.SaveLocation   = (SaveLocations) dialog.FindControl<ComboBox>("ComboBoxSaveLoc").SelectedIndex;
-			_options.CustomSavePath = dialog.FindControl<TextBox>("TextBoxCustomSavePath").Text;
+			_options.AutoSave = fc("CheckBoxAutoSave").IsChecked!.Value;
+			_options.ClientId = ft("TextBoxClientId").Text;
+			_options.DefaultCollection = ft("TextBoxDefaultCollection").Text;
+			_options.MinifiedJson = fc("CheckBoxMinify").IsChecked!.Value;
+			_options.SaveLocation = (SaveLocations) fb("ComboBoxSaveLoc").SelectedIndex;
+			_options.CustomSavePath = ft("TextBoxCustomSavePath").Text;
+			((OptionsExtension) _options.Extensions["avalonia"]).UseDarkTheme = fc("CheckBoxDark").IsChecked!.Value;
 
 			SaveOptions(_options, _options.MinifiedJson, _options.SaveLocation);
 			_apiWorker.Reset(_options.ClientId);
 			MakeActive(_active);
+
+			// make the code a little smaller using local functions
+			CheckBox fc(string name) => dialog.FindControl<CheckBox>(name);
+			TextBox  ft(string name) => dialog.FindControl<TextBox>(name);
+			ComboBox fb(string name) => dialog.FindControl<ComboBox>(name);
 		}
 
 		private async Task EditPresence(int i)

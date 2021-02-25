@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DiscordRichPresencePresets.Avalonia.OptionsDialog"
         Title="Options" Height="350" Width="600">
-	<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,*">
+	<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,*">
 		<Grid.Styles>
 			<Style Selector="Button,ComboBox">
 				<Setter Property="Margin" Value="5" />
@@ -38,8 +38,10 @@
 		
 		<Label Name="LabelCustomSavePath" Content="Custom save path" Grid.Row="6" Grid.Column="0" Margin="5" />
 		<TextBox Name="TextBoxCustomSavePath" Grid.Row="6" Grid.Column="1" Margin="5" />
+
+		<CheckBox Name="CheckBoxDark" Content="Use Dark mode" Grid.Row="7" Grid.Column="1" Margin="5" />
 		
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0">
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="9" Grid.ColumnSpan="2" Grid.Column="0">
 			<Button Content="Cancel" Width="100" Click="ButtonCancel_OnClick" />
 			<Button Content="OK" Width="100" Click="ButtonOk_OnClick" />
 		</StackPanel>
