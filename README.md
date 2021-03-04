@@ -1,4 +1,6 @@
 # DiscordRichPresencePresets
+[![Packaging status](https://repology.org/badge/vertical-allrepos/discordrichpresencepresets.svg)](https://repology.org/project/discordrichpresencepresets/versions)
+
 Discord Rich Presence Presets, is a program written in .NET that adds a custom presence on Discord, with the ability to change presets.
 For Example you can set a preset for sleeping, e p i c l y  gaming, doing homework etc.
 # Usage
